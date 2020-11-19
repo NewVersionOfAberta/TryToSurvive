@@ -13,7 +13,7 @@ Clock::Clock() : m_startTime(getCurrentTime())
 {
 }
 
-INT64 Clock::getElapsedTime()
+sf::Time Clock::getElapsedTime()
 {
     INT64 now = getCurrentTime();
     INT64 elapsed = now - m_startTime;
@@ -21,7 +21,7 @@ INT64 Clock::getElapsedTime()
     return elapsed;
 }
 
-INT64 Clock::restart()
+sf::Time Clock::restart()
 {
     INT64 now = getCurrentTime();
     INT64 elapsed = now - m_startTime;
@@ -30,7 +30,7 @@ INT64 Clock::restart()
     return elapsed;
 }
 
-INT64 Clock::getCurrentTime()
+sf::Time Clock::getCurrentTime()
 {
     static LARGE_INTEGER frequency = getFrequency();
     LARGE_INTEGER time;

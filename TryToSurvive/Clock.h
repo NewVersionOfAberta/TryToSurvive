@@ -1,13 +1,16 @@
 #pragma once
+
+#include "Usings.h"
+
 class Clock
 {
 public:
     Clock();
-    INT64 getElapsedTime();
-    INT64 restart();
-    INT64 getCurrentTime();
+    sf::Time getElapsedTime();
+    sf::Time restart();
+    sf::Time getCurrentTime();
 
 private:
-    INT64 m_startTime;
+    sf::Time m_startTime;
 };
 

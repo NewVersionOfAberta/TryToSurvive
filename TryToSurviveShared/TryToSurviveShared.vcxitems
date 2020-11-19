@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{e2d5e87f-1fbd-49ea-abad-0e076d890f1f}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Moveable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BitMask.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Communicator.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Base.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Position.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Entity_Manager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Message.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MessageHandler.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Observer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)System_Manager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)S_Base.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Usings.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Directions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ECS_Types.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)EntityMessage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Entity_Manager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)System_Manager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)S_Base.cpp" />
+  </ItemGroup>
+</Project>

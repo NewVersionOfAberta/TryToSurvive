@@ -1,19 +1,33 @@
 #pragma once
 #include <Windows.h>
+#include "Window.h"
+#include "EventManager.h"
+#include "StateManager.h"
+#include "Entity_Manager.h"
+#include "System_Manager.h"
+#include "Clock.h"
+#include <iostream>
 
-class Game
-{
+class Game {
 public:
 	Game();
 	~Game();
-	void HandleInput();
+
 	void Update();
 	void Render();
-	//HDC GetWindow();
-	//void SetHDC(HDC hdc);
+	void LateUpdate();
 
+	sf::Time GetElapsed();
+
+	Window* GetWindow();
 private:
-	HWND m_hwnd;
-	
+	void RestartClock();
+	Clock m_clock;
+	sf::Time m_elapsed;
+	SharedContext m_context;
+	Window m_window;
+	StateManager m_stateManager;
+	EntityManager m_entityManager;
+	SystemManager m_systemManager;
 };
 

@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TryToSurvive", "TryToSurvive.vcxproj", "{44525C7D-CE36-4525-8C2F-BFEE3C9D9637}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TryToSurviveShared", "..\TryToSurviveShared\TryToSurviveShared.vcxitems", "{E2D5E87F-1FBD-49EA-ABAD-0E076D890F1F}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\TryToSurviveShared\TryToSurviveShared.vcxitems*{44525c7d-ce36-4525-8c2f-bfee3c9d9637}*SharedItemsImports = 4
+		..\TryToSurviveShared\TryToSurviveShared.vcxitems*{e2d5e87f-1fbd-49ea-abad-0e076d890f1f}*SharedItemsImports = 9
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86

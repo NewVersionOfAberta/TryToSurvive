@@ -1,6 +1,7 @@
 #include <Windows.h>
 
 #include "Window.h"
+#include "Game.h"
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -18,7 +19,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
     HWND                hWnd;
     MSG                 msg;
     WNDCLASS            wndClass;
-    ULONG_PTR           gdiplusToken;
     BOOL                bDone;
 
 
@@ -50,6 +50,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
 
     ShowWindow(hWnd, iCmdShow);
     UpdateWindow(hWnd);
+    Game* game = new Game();
 
     bDone = FALSE;
     window = new Window();
@@ -63,10 +64,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
             }
         }
         else {
-            /* do rendering here */
+            game->Update();
+            game->Render();
+            game->LateUpdate();
         }
     }
-
+    delete game;
     return msg.wParam;
 }  // WinMain
 
