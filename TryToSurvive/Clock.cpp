@@ -38,3 +38,4 @@ sf::Time Clock::getCurrentTime()
     return 1000000 * time.QuadPart / frequency.QuadPart;
 
 }
+

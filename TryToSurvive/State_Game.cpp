@@ -3,11 +3,14 @@
 #include "Message.h"
 #include "EntityMessage.h"
 #include "Directions.h"
+#include "Map.h"
 #include <C_Position.h>
+
+#define TO_SECONDS 1000
 
 
 State_Game::State_Game(StateManager* l_stateManager)
-	: BaseState(l_stateManager), m_player(-1)//, m_gameMap(nullptr), m_client(m_stateMgr->GetContext()->m_client) {}
+	: BaseState(l_stateManager), m_player(-1), m_gameMap(nullptr)//, m_client(m_stateMgr->GetContext()->m_client) {}
 	{}
 State_Game::~State_Game() {}
 
@@ -28,8 +31,8 @@ void State_Game::OnCreate() {
 		m_view.setCenter(size.first / 2, size.second / 2);
 		m_stateMgr->GetContext()->m_wind->SetView(m_view);
 
-	/*	m_gameMap = new Map(m_stateMgr->GetContext());
-		m_gameMap->LoadMap("media/Maps/map1.map");*/
+		m_gameMap = new Map(m_stateMgr->GetContext());
+		m_gameMap->LoadMap("media\\map.map");
 
 		//EntityManager* entities = m_stateMgr->GetContext()->m_entityManager;
 		//m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Collision>(System::Collision)->SetMap(m_gameMap);
@@ -61,7 +64,7 @@ void State_Game::OnDestroy() {
 	evMgr->RemoveCallback(StateType::Game, "Player_MoveDown");
 //	evMgr->RemoveCallback(StateType::Game, "Player_Attack");
 
-	//if (m_gameMap) { delete m_gameMap; m_gameMap = nullptr; }
+	if (m_gameMap) { delete m_gameMap; m_gameMap = nullptr; }
 }
 
 void State_Game::Update(const sf::Time& l_time) {
@@ -69,11 +72,11 @@ void State_Game::Update(const sf::Time& l_time) {
 	SharedContext* context = m_stateMgr->GetContext();
 	UpdateCamera();
 
-	/*m_gameMap->Update(l_time.asSeconds());
+	m_gameMap->Update(l_time * TO_SECONDS);
 	{
-		sf::Lock lock(m_client->GetMutex());
-		context->m_systemManager->Update(l_time.asSeconds());
-	}*/
+		//sf::Lock lock(m_client->GetMutex());
+		context->m_systemManager->Update(l_time * TO_SECONDS);
+	}
 }
 
 void State_Game::UpdateCamera() {
@@ -81,26 +84,26 @@ void State_Game::UpdateCamera() {
 	SharedContext* context = m_stateMgr->GetContext();
 	C_Position* pos = context->m_entityManager->GetComponent<C_Position>(m_player, Component::Position);
 
-	m_view.setCenter(sf::Vector2f(100, 100));//pos->GetPosition());
-	context->m_wind->SetView(m_view);
+	//m_view.setCenter(sf::Vector2f(100, 100));//pos->GetPosition());
+	//context->m_wind->SetView(m_view);
 
-	sf::FloatRect viewSpace = context->m_wind->GetViewSpace();
-	/*if (viewSpace.left <= 0) {
-		m_view.setCenter(viewSpace.width / 2, m_view.getCenter().y);
+	/*sf::FloatRect viewSpace = context->m_wind->GetViewSpace();
+	if (viewSpace.left <= 0) {
+		m_view.setCenter(viewSpace.width / 2, m_view.getCenter().second);
 		context->m_wind->SetView(m_view);
 	}
-	else if (viewSpace.left + viewSpace.width > (m_gameMap->GetMapSize().x) * Sheet::Tile_Size) {
-		m_view.setCenter(((m_gameMap->GetMapSize().x) * Sheet::Tile_Size) - (viewSpace.width / 2), m_view.getCenter().y);
-		context->m_wind->GetRenderWindow()->setView(m_view);
+	else if (viewSpace.left + viewSpace.width > (m_gameMap->GetMapSize().first) * Sheet::Tile_Size) {
+		m_view.setCenter(((m_gameMap->GetMapSize().first) * Sheet::Tile_Size) - (viewSpace.width / 2), m_view.getCenter().second);
+		context->m_wind->SetView(m_view);
 	}
 
 	if (viewSpace.top <= 0) {
-		m_view.setCenter(m_view.getCenter().x, viewSpace.height / 2);
-		context->m_wind->GetRenderWindow()->setView(m_view);
+		m_view.setCenter(m_view.getCenter().first, viewSpace.height / 2);
+		context->m_wind->SetView(m_view);
 	}
-	else if (viewSpace.top + viewSpace.height > (m_gameMap->GetMapSize().y) * Sheet::Tile_Size) {
-		m_view.setCenter(m_view.getCenter().x, ((m_gameMap->GetMapSize().y) * Sheet::Tile_Size) - (viewSpace.height / 2));
-		context->m_wind->GetRenderWindow()->setView(m_view);
+	else if (viewSpace.top + viewSpace.height > (m_gameMap->GetMapSize().second) * Sheet::Tile_Size) {
+		m_view.setCenter(m_view.getCenter().first, ((m_gameMap->GetMapSize().second) * Sheet::Tile_Size) - (viewSpace.height / 2));
+		context->m_wind->SetView(m_view);
 	}*/
 
 	// Debug.
@@ -120,12 +123,12 @@ void State_Game::UpdateCamera() {
 }
 
 void State_Game::Draw() {
-	/*if (!m_gameMap) { return; }
-	sf::Lock lock(m_client->GetMutex());
+	if (!m_gameMap) { return; }
+	//sf::Lock lock(m_client->GetMutex());
 	for (int i = 0; i < Sheet::Num_Layers; ++i) {
 		m_gameMap->Draw(i);
-		m_stateMgr->GetContext()->m_systemManager->Draw(m_stateMgr->GetContext()->m_wind, i);
-	}*/
+		//m_stateMgr->GetContext()->m_systemManager->Draw(m_stateMgr->GetContext()->m_wind, i);
+	}
 }
 
 void State_Game::MainMenu(EventDetails* l_details) {

@@ -25,4 +25,14 @@ namespace sf {
 		float height;
 	};
 
+	struct IntRect {
+		IntRect(int l_x, int l_y, int l_height, int l_width) :
+			x(l_x), y(l_y), heigth(l_height), width(l_width){}
+
+		int x;
+		int y;
+		int width;
+		int heigth;
+	};
+
 }

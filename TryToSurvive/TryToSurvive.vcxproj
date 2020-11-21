@@ -147,22 +147,28 @@
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SharedContext.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="State_Game.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="View.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BaseState.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="State_Game.cpp" />
     <ClCompile Include="View.cpp" />
     <ClCompile Include="Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TryToSurvive.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,8 +1,9 @@
 #pragma once
-#include "BaseState.h"
 #include <unordered_map>
+#include "BaseState.h"
 #include "EventManager.h"
 #include "Usings.h"
+#include "Map.h"
 
 class State_Game : public BaseState {
 public:
@@ -28,7 +29,7 @@ public:
 	//void ToggleOverlay(EventDetails* l_details);
 private:
 	void UpdateCamera();
-	//Map* m_gameMap;
+	Map* m_gameMap;
 	int m_player;
 	//Client* m_client;
 };

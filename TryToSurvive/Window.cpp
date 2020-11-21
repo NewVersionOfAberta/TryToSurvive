@@ -4,9 +4,19 @@
 #include "Event.h"
 #include "Usings.h"
 
-Window::Window()
+#pragma comment(lib, "msimg32")
+
+Window::Window(HWND l_hwnd) : m_hwnd(l_hwnd)
 {
-   
+	RECT clientRect;
+	m_hdc = GetDC(m_hwnd);
+	m_tempDC = CreateCompatibleDC(m_hdc);
+	GetClientRect(l_hwnd, &clientRect);
+	m_view = GetDefaultView();
+	m_windowSize.first = clientRect.right;
+	m_windowSize.second = clientRect.bottom;
+	m_hbmBack = CreateCompatibleBitmap(m_hdc, clientRect.right, clientRect.bottom);
+	SelectObject(m_tempDC, m_hbmBack);
 }
 
 
@@ -26,9 +36,20 @@ void Window::Update()
 
 void Window::BeginDraw()
 {
-
+	
 }
-void Window::EndDraw() { }
+
+
+
+void Window::EndDraw() 
+{
+	RECT rcClient;
+	GetClientRect(m_hwnd, &rcClient);
+	//FillRect(m_tempDC, &rcClient, (HBRUSH)(BLACK_BRUSH));
+	InvalidateRect(m_hwnd, &rcClient, false);
+	ReleaseDC(m_hwnd, m_hdc);
+	//EndPaint(m_hwnd, &m_ps);
+}
 
 bool Window::IsDone() { return m_isDone; }
 bool Window::IsFullscreen() { return m_isFullscreen; }
@@ -39,6 +60,20 @@ View Window::GetDefaultView()
 	RECT clientRect;
 	GetClientRect(m_hwnd, &clientRect);
 	return View(sf::Vector2f(clientRect.right / 2.0, clientRect.bottom / 2.0), sf::Vector2f(clientRect.right, clientRect.bottom));
+}
+
+void Window::Draw(int destX, int destY,  int heigth, int width, int srcX, int srcY, HBITMAP img)
+{
+	HDC hdc = GetCompatibleDC();
+	HBITMAP temp;
+	if (!GetObject(img, sizeof(BITMAP), &bm)) { return; }
+
+	if (!(temp = (HBITMAP)SelectObject(hdc, img))) { return; };
+	TransparentBlt(m_tempDC, destX, destY, heigth, width, hdc, srcX, srcY, heigth, width, TRANSPARENT_COLOR);
+	SelectObject(hdc, temp);
+	//DeleteObject(img);
+	//ReleaseDC(NULL, hdc);
+	//DeleteObject(hdc);
 }
 
 LRESULT Window::ProcessEvents(HWND hWnd, UINT message,
@@ -58,6 +93,14 @@ LRESULT Window::ProcessEvents(HWND hWnd, UINT message,
 		event.type = ttsv::Event::KeyPressed;
 		event.key.code = GetKey(wParam);
 		PushEvent(event);
+		break;
+	case WM_PAINT:
+		if (this && m_tempDC && m_hdc) 
+		{
+			BeginPaint(hWnd, &m_ps);
+			BitBlt(m_hdc, 0, 0, m_view.getSize().first, m_view.getSize().second, m_tempDC, 0, 0, SRCCOPY);
+			EndPaint(hWnd, &m_ps);
+		}
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}

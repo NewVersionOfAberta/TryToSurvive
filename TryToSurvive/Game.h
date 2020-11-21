@@ -1,16 +1,17 @@
 #pragma once
 #include <Windows.h>
+#include <iostream>
 #include "Window.h"
 #include "EventManager.h"
 #include "StateManager.h"
 #include "Entity_Manager.h"
 #include "System_Manager.h"
 #include "Clock.h"
-#include <iostream>
+
 
 class Game {
 public:
-	Game();
+	Game(Window l_window);
 	~Game();
 
 	void Update();
@@ -29,5 +30,6 @@ private:
 	StateManager m_stateManager;
 	EntityManager m_entityManager;
 	SystemManager m_systemManager;
+	TextureManager m_textureManager;
 };
 

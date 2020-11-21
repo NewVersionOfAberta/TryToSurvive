@@ -4,19 +4,31 @@
 #include <sstream>
 #include <algorithm>
 #include <windows.h>
-#include <Shlwapi.h>
+
+#define SIZE 256
 
 namespace Utils {
-	inline std::wstring GetWorkingDirectory() {
+	inline std::string GetWorkingDirectory() {
+		
+
 		HMODULE hModule = GetModuleHandle(nullptr);
 		if (hModule) {
-			wchar_t path[256];
-			GetModuleFileName(hModule, path, sizeof(path)*2);
-			PathRemoveFileSpec(path);
-			wcscat_s(path, L"\\");
-			return std::wstring(path);
+			char path[SIZE];
+			char newPath[SIZE] = "\0";
+
+			char drive[_MAX_DRIVE];
+			char dir[_MAX_DIR];
+			char fname[_MAX_FNAME];
+			char ext[_MAX_EXT];
+
+			GetModuleFileNameA(hModule, path, SIZE);
+			_splitpath_s(path, drive, dir, fname, ext);
+			strcat_s(newPath, SIZE,  drive);
+			strcat_s(newPath, SIZE, dir);
+			//strcat_s(newPath, SIZE, "\\");
+			return std::string(newPath);
 		}
-		return L"";
+		return "";
 	}
 
 	inline void ReadQuotedString(std::stringstream& l_stream,

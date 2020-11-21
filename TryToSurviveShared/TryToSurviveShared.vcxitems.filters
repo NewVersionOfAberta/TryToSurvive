@@ -18,6 +18,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System_Manager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)C_Moveable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)S_Base.cpp" />

@@ -50,10 +50,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
 
     ShowWindow(hWnd, iCmdShow);
     UpdateWindow(hWnd);
-    Game* game = new Game();
+    window = new Window(hWnd);
+    Game* game = new Game(*window);
 
     bDone = FALSE;
-    window = new Window();
+    
     while (FALSE == bDone) {
         if (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);

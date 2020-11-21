@@ -4,10 +4,12 @@
 #include "View.h"
 #include "EventManager.h"
 
+#define TRANSPARENT_COLOR RGB(255, 0, 255)
+
 class Window
 {
 public:
-	Window();
+	Window(HWND l_hwnd);
 
 	void Update();
 
@@ -24,6 +26,9 @@ public:
 	bool IsFullscreen();
 	bool IsFocused();
 	View GetDefaultView();
+	void SetWindow(HWND hwnd) { m_hwnd = hwnd; }
+	void Draw(int destX, int destY, int heigth, int width, int srcX, int srcY, HBITMAP img);
+	HDC GetCompatibleDC() { return CreateCompatibleDC(m_hdc); }
 
 private:
 	ttsv::Event::Key GetKey(WPARAM key);
@@ -38,6 +43,11 @@ private:
 
 	HWND m_hwnd;
 	HDC m_hdc;
+	HDC m_tempDC;
+	PAINTSTRUCT m_ps;
+	HBITMAP m_hbmBack;
+	BITMAP bm;
+	
 	bool m_isDone;
 	bool m_isFullscreen;
 	bool m_isFocused;

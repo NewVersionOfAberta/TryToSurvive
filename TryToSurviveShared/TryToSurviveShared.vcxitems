@@ -24,6 +24,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Message.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MessageHandler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Observer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System_Manager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)S_Base.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Usings.h" />

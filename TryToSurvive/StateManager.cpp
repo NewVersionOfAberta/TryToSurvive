@@ -97,7 +97,7 @@ void StateManager::SwitchTo(const StateType& l_type) {
 			m_states.erase(itr);
 			m_states.emplace_back(tmp_type, tmp_state);
 			tmp_state->Activate();
-			m_shared->m_wind->SetView(tmp_state->GetView());
+			m_shared->m_wind->SetView(m_shared->m_wind->GetDefaultView());
 			return;
 		}
 	}
@@ -106,7 +106,7 @@ void StateManager::SwitchTo(const StateType& l_type) {
 	if (!m_states.empty()) { m_states.back().second->Deactivate(); }
 	CreateState(l_type);
 	m_states.back().second->Activate();
-	m_shared->m_wind->SetView(m_states.back().second->GetView());
+	m_shared->m_wind->SetView(m_shared->m_wind->GetDefaultView());
 }
 
 void StateManager::Remove(const StateType& l_type) {
