@@ -3,6 +3,7 @@
 #include "Event.h"
 #include "View.h"
 #include "EventManager.h"
+#include "Sprite.h"
 
 #define TRANSPARENT_COLOR RGB(255, 0, 255)
 
@@ -28,6 +29,7 @@ public:
 	View GetDefaultView();
 	void SetWindow(HWND hwnd) { m_hwnd = hwnd; }
 	void Draw(int destX, int destY, int heigth, int width, int srcX, int srcY, HBITMAP img);
+	void Draw(Sprite sprite);
 	HDC GetCompatibleDC() { return CreateCompatibleDC(m_hdc); }
 
 private:
@@ -44,8 +46,11 @@ private:
 	HWND m_hwnd;
 	HDC m_hdc;
 	HDC m_tempDC;
+	HDC m_bitmapDC;
+
 	PAINTSTRUCT m_ps;
 	HBITMAP m_hbmBack;
+	HBITMAP m_tempBm;
 	BITMAP bm;
 	
 	bool m_isDone;

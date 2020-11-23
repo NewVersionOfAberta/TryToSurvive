@@ -85,12 +85,19 @@ struct Binding {
 	void BindEvent(EventType l_type, EventInfo l_info = EventInfo()) {
 		m_events.emplace_back(l_type, l_info);
 	}
+	int GetC() { return c; }
+	void IncC() { c++; }
+	void ResetC() { c = 0; }
+	Events GetEvents() { return m_events; }
+	std::string GetName() { return m_name; }
 
+	EventDetails m_details;
+private:
 	Events m_events;
 	std::string m_name;
 	int c; // Count of events that are "happening".
 
-	EventDetails m_details;
+	
 };
 
 using Bindings = std::unordered_map<std::string, Binding*>;

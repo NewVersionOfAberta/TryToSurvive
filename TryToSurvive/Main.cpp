@@ -5,14 +5,12 @@
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-Window *window;
-
 VOID OnPaint(HWND hWnd)
 {
 
 
 }
-
+Game* m_game;
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
 {
@@ -48,13 +46,15 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
         hInstance,                // program instance handle
         NULL);                    // creation parameters
 
+    
+    Game game(hWnd);
+    m_game = &game;
+
     ShowWindow(hWnd, iCmdShow);
     UpdateWindow(hWnd);
-    window = new Window(hWnd);
-    Game* game = new Game(*window);
 
     bDone = FALSE;
-    
+
     while (FALSE == bDone) {
         if (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
@@ -65,18 +65,22 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
             }
         }
         else {
-            game->Update();
-            game->Render();
-            game->LateUpdate();
+            game.Update();
+            game.Render();
+            game.LateUpdate();
         }
     }
-    delete game;
     return msg.wParam;
 }  // WinMain
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
     WPARAM wParam, LPARAM lParam)
 {
-    return window->ProcessEvents(hWnd, message, wParam, lParam);
+    if (m_game && m_game->GetWindow()) {
+        return m_game->GetWindow()->ProcessEvents(hWnd, message, wParam, lParam);
+    }
+    else {
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
     
 } // WndProc

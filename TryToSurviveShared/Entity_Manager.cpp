@@ -27,12 +27,12 @@ int EntityManager::AddEntity(const std::string& l_entityFile, int l_id) {
 	int EntityId = -1;
 
 	std::ifstream file;
-	/*file.open(Utils::GetWorkingDirectory() +
+	file.open(Utils::GetWorkingDirectory() +
 		"media/Entities/" + l_entityFile + ".entity");
 	if (!file.is_open()) {
 		std::cout << "! Failed to load entity: " << l_entityFile << std::endl;
 		return -1;
-	}*/
+	}
 	std::string line;
 	while (std::getline(file, line)) {
 		if (line[0] == '|') { continue; }

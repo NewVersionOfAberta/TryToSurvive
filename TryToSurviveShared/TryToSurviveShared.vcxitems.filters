@@ -17,12 +17,17 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Communicator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System_Manager.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)C_Moveable.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Movable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_State.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)S_State.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)S_Control.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)S_Base.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Entity_Manager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System_Manager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)S_State.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)S_Control.cpp" />
   </ItemGroup>
 </Project>

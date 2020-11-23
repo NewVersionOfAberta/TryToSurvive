@@ -11,7 +11,7 @@
 
 class Game {
 public:
-	Game(Window l_window);
+	Game(HWND l_window);
 	~Game();
 
 	void Update();
@@ -28,8 +28,8 @@ private:
 	SharedContext m_context;
 	Window m_window;
 	StateManager m_stateManager;
-	EntityManager m_entityManager;
-	SystemManager m_systemManager;
+	ClientEntityManager m_entityManager;
+	ClientSystemManager m_systemManager;
 	TextureManager m_textureManager;
 };
 

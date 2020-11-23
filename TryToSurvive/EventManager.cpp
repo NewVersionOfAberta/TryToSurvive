@@ -15,9 +15,9 @@ EventManager::~EventManager() {
 }
 
 bool EventManager::AddBinding(Binding* l_binding) {
-	if (m_bindings.find(l_binding->m_name) != m_bindings.end())
+	if (m_bindings.find(l_binding->GetName()) != m_bindings.end())
 		return false;
-	return m_bindings.emplace(l_binding->m_name, l_binding).second;
+	return m_bindings.emplace(l_binding->GetName(), l_binding).second;
 }
 
 bool EventManager::RemoveBinding(std::string l_name) {
@@ -38,7 +38,7 @@ void EventManager::HandleEvent(ttsv::Event& l_event) {
 	// Handling SFML events.
 	for (auto& b_itr : m_bindings) {
 		Binding* bind = b_itr.second;
-		for (auto& e_itr : bind->m_events) {
+		for (auto& e_itr : bind->GetEvents()) {
 			EventType ttsvEvent = (EventType)l_event.type;
 			/*if (e_itr.first == EventType::GUI_Click || e_itr.first == EventType::GUI_Release ||
 				e_itr.first == EventType::GUI_Hover || e_itr.first == EventType::GUI_Leave)
@@ -53,7 +53,7 @@ void EventManager::HandleEvent(ttsv::Event& l_event) {
 					if (bind->m_details.m_keyCode != -1) {
 						bind->m_details.m_keyCode = e_itr.second.m_code;
 					}
-					++(bind->c);
+					bind->IncC();
 					break;
 				}
 			}
@@ -82,7 +82,7 @@ void EventManager::HandleEvent(ttsv::Event& l_event) {
 				else if (ttsvEvent == EventType::TextEntered) {
 					bind->m_details.m_textEntered = l_event.text.unicode;
 				}
-				++(bind->c);
+				bind->IncC();
 			}
 		}
 	}
@@ -91,7 +91,7 @@ void EventManager::HandleEvent(ttsv::Event& l_event) {
 //void EventManager::HandleEvent(GUI_Event& l_event) {
 //	for (auto& b_itr : m_bindings) {
 //		Binding* bind = b_itr.second;
-//		for (auto& e_itr : bind->m_events)
+//		for (auto& e_itr : bind->GetEvents())
 //		{
 //			if (e_itr.first != EventType::GUI_Click && e_itr.first != EventType::GUI_Release &&
 //				e_itr.first != EventType::GUI_Hover && e_itr.first != EventType::GUI_Leave)
@@ -122,14 +122,14 @@ void EventManager::Update() {
 	if (!m_hasFocus) { return; }
 	for (auto& b_itr : m_bindings) {
 		Binding* bind = b_itr.second;
-		for (auto& e_itr : bind->m_events) {
+		for (auto& e_itr : bind->GetEvents()) {
 			switch (e_itr.first) {
 			case(EventType::Keyboard):
 				if (Keyboard::IsKeyPressed(ttsv::Event::Key(e_itr.second.m_code))) {
 					if (bind->m_details.m_keyCode != -1) {
 						bind->m_details.m_keyCode = e_itr.second.m_code;
 					}
-					++(bind->c);
+					bind->IncC();
 				}
 				break;
 			/*case(EventType::Mouse):
@@ -143,12 +143,12 @@ void EventManager::Update() {
 			}
 		}
 
-		if (bind->m_events.size() == bind->c) {
+		if (bind->GetEvents().size() == bind->GetC()) {
 			auto stateCallbacks = m_callbacks.find(m_currentState);
 			auto otherCallbacks = m_callbacks.find(StateType(0));
 
 			if (stateCallbacks != m_callbacks.end()) {
-				auto callItr = stateCallbacks->second.find(bind->m_name);
+				auto callItr = stateCallbacks->second.find(bind->GetName());
 				if (callItr != stateCallbacks->second.end()) {
 					// Pass in information about events.
 					callItr->second(&bind->m_details);
@@ -156,14 +156,14 @@ void EventManager::Update() {
 			}
 
 			if (otherCallbacks != m_callbacks.end()) {
-				auto callItr = otherCallbacks->second.find(bind->m_name);
+				auto callItr = otherCallbacks->second.find(bind->GetName());
 				if (callItr != otherCallbacks->second.end()) {
 					// Pass in information about events.
 					callItr->second(&bind->m_details);
 				}
 			}
 		}
-		bind->c = 0;
+		bind->ResetC();
 		bind->m_details.Clear();
 	}
 }

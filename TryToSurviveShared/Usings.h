@@ -12,6 +12,7 @@ namespace sf {
 
 	
 	struct FloatRect {
+		FloatRect():left(0), top(0), width(0), height(0){}
 		FloatRect(Vector2f topLeft, Vector2f size) {
 			left = topLeft.first;
 			top = topLeft.second;
@@ -19,10 +20,19 @@ namespace sf {
 			height = size.second;
 		}
 
+		bool intersects(FloatRect l_rect) {
+			bool isLeftInX = (l_rect.left > left && l_rect.left < left + width);
+			bool isTopInY = l_rect.top > top && l_rect.top < top + height;
+			bool isRightInX = l_rect.left + l_rect.width > left && l_rect.left + width < left + width;
+			bool isBottomInY = l_rect.top + height > top && l_rect.top + height < top + height;
+			return (isLeftInX && isTopInY) || (isRightInX && isTopInY) || (isLeftInX && isBottomInY) || (isRightInX && isBottomInY);
+		}
+
 		float left;
 		float top;
 		float width;
 		float height;
+
 	};
 
 	struct IntRect {

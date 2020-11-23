@@ -1,13 +1,12 @@
 #include "Game.h"
 #include <time.h>
 
-Game::Game(Window l_window) : m_window(l_window),
-m_entityManager(&m_systemManager), m_stateManager(&m_context),
-m_systemManager(), m_context(), m_textureManager()
+Game::Game(HWND l_window) : m_window(l_window),
+m_entityManager(&m_systemManager, &m_textureManager), m_stateManager(&m_context),
+m_systemManager(&m_textureManager), m_context(), m_textureManager()
 {
 	m_clock.restart();
 	srand(time(nullptr));
-
 	m_systemManager.SetEntityManager(&m_entityManager);
 
 	//m_client.SetServerInformation("localhost", (PortNumber)Network::ServerPort);
@@ -55,7 +54,6 @@ void Game::Render() {
 	m_window.BeginDraw();
 	// Render here.
 	m_stateManager.Draw();
-	//m_window.Draw(0, 0, 0, 0, 0, 0, nullptr);
 	//View currentView = m_window.GetView();
 	m_window.SetView(m_window.GetDefaultView());
 	//m_guiManager.Render(m_window.GetRenderWindow());

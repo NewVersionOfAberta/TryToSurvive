@@ -14,7 +14,8 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)C_Moveable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Movable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_State.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)BitMask.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Communicator.h" />
@@ -27,6 +28,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System_Manager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)S_Base.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)S_Control.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)S_State.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Usings.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Directions.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ECS_Types.h" />
@@ -37,5 +40,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Entity_Manager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System_Manager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)S_Base.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)S_Control.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)S_State.cpp" />
   </ItemGroup>
 </Project>

@@ -70,6 +70,3 @@ protected:
 	SystemManager* m_systems;
 };
 
-class Entity_Manager
-{
-};

@@ -7,13 +7,13 @@
 #include "SharedContext.h"
 
 
-enum Sheet { Tile_Size = 32, Sheet_Width = 672, Sheet_Height = 736, Num_Layers = 1 };
+enum Sheet { Tile_Size = 32, Sheet_Width = 672, Sheet_Height = 736, Num_Layers = 4 };
 using TileID = unsigned int;
 
 struct TileInfo {
 	TileInfo(SharedContext* l_context,
 		const std::string& l_texture = "", TileID l_id = 0)
-		: m_context(l_context), m_id(0), m_deadly(false)
+		: m_context(l_context), m_id(0), m_deadly(false), m_solid(false), m_friction(0.9)
 	{
 		TextureManager* tmgr = l_context->m_textureManager;
 		if (l_texture == "") { m_id = l_id; return; }

@@ -1,8 +1,8 @@
 #pragma once
 #include "Window.h"
 #include "EventManager.h"
-#include "System_Manager.h"
-#include "Entity_Manager.h"
+#include "Client_System_Manager.h"
+#include "Client_Entity_Manager.h"
 #include "TextureManager.h"
 
 class Map;
@@ -26,8 +26,8 @@ struct SharedContext {
 		Window* m_wind;
 		//Client* m_client;
 		EventManager* m_eventManager;
-		SystemManager* m_systemManager;
-		EntityManager* m_entityManager;
+		ClientSystemManager* m_systemManager;
+		ClientEntityManager* m_entityManager;
 		Map* m_gameMap;
 		TextureManager* m_textureManager;
 		/*

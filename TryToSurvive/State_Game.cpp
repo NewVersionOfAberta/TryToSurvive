@@ -5,12 +5,13 @@
 #include "Directions.h"
 #include "Map.h"
 #include <C_Position.h>
+#include "S_Movement.h"
 
-#define TO_SECONDS 1000
+#define TO_SECONDS 1000000.0
 
 
 State_Game::State_Game(StateManager* l_stateManager)
-	: BaseState(l_stateManager), m_player(-1), m_gameMap(nullptr)//, m_client(m_stateMgr->GetContext()->m_client) {}
+	: BaseState(l_stateManager), m_player(0), m_gameMap(nullptr)//, m_client(m_stateMgr->GetContext()->m_client) {}
 	{}
 State_Game::~State_Game() {}
 
@@ -34,9 +35,9 @@ void State_Game::OnCreate() {
 		m_gameMap = new Map(m_stateMgr->GetContext());
 		m_gameMap->LoadMap("media\\map.map");
 
-		//EntityManager* entities = m_stateMgr->GetContext()->m_entityManager;
+		EntityManager* entities = m_stateMgr->GetContext()->m_entityManager;
 		//m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Collision>(System::Collision)->SetMap(m_gameMap);
-		//m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Movement>(System::Movement)->SetMap(m_gameMap);
+		m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Movement>(System::Movement)->SetMap(m_gameMap);
 
 		//m_stateMgr->GetContext()->m_soundManager->PlayMusic("TownTheme", 50.f, true);
 	/*}
@@ -72,10 +73,10 @@ void State_Game::Update(const sf::Time& l_time) {
 	SharedContext* context = m_stateMgr->GetContext();
 	UpdateCamera();
 
-	m_gameMap->Update(l_time * TO_SECONDS);
+	m_gameMap->Update(l_time / TO_SECONDS);
 	{
 		//sf::Lock lock(m_client->GetMutex());
-		context->m_systemManager->Update(l_time * TO_SECONDS);
+		context->m_systemManager->Update(l_time / TO_SECONDS);
 	}
 }
 
@@ -84,10 +85,10 @@ void State_Game::UpdateCamera() {
 	SharedContext* context = m_stateMgr->GetContext();
 	C_Position* pos = context->m_entityManager->GetComponent<C_Position>(m_player, Component::Position);
 
-	//m_view.setCenter(sf::Vector2f(100, 100));//pos->GetPosition());
-	//context->m_wind->SetView(m_view);
+	m_view.setCenter(pos->GetPosition());
+	context->m_wind->SetView(m_view);
 
-	/*sf::FloatRect viewSpace = context->m_wind->GetViewSpace();
+	sf::FloatRect viewSpace = context->m_wind->GetViewSpace();
 	if (viewSpace.left <= 0) {
 		m_view.setCenter(viewSpace.width / 2, m_view.getCenter().second);
 		context->m_wind->SetView(m_view);
@@ -104,7 +105,7 @@ void State_Game::UpdateCamera() {
 	else if (viewSpace.top + viewSpace.height > (m_gameMap->GetMapSize().second) * Sheet::Tile_Size) {
 		m_view.setCenter(m_view.getCenter().first, ((m_gameMap->GetMapSize().second) * Sheet::Tile_Size) - (viewSpace.height / 2));
 		context->m_wind->SetView(m_view);
-	}*/
+	}
 
 	// Debug.
 	/*if (context->m_debugOverlay.Debug()) {
@@ -127,7 +128,7 @@ void State_Game::Draw() {
 	//sf::Lock lock(m_client->GetMutex());
 	for (int i = 0; i < Sheet::Num_Layers; ++i) {
 		m_gameMap->Draw(i);
-		//m_stateMgr->GetContext()->m_systemManager->Draw(m_stateMgr->GetContext()->m_wind, i);
+		m_stateMgr->GetContext()->m_systemManager->Draw(m_stateMgr->GetContext()->m_wind, i);
 	}
 }
 

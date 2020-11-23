@@ -140,8 +140,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Anim_Base.h" />
+    <ClInclude Include="Anim_Directional.h" />
     <ClInclude Include="BaseState.h" />
+    <ClInclude Include="Client_Entity_Manager.h" />
+    <ClInclude Include="Client_System_Manager.h" />
     <ClInclude Include="Clock.h" />
+    <ClInclude Include="C_Drawable.h" />
+    <ClInclude Include="C_SpriteSheet.h" />
     <ClInclude Include="EntityEvents.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventManager.h" />
@@ -150,20 +156,33 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SharedContext.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteSheet.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="State_Game.h" />
+    <ClInclude Include="S_Movement.h" />
+    <ClInclude Include="S_Renderer.h" />
+    <ClInclude Include="S_SheetAnimation.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="View.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Anim_Base.cpp" />
+    <ClCompile Include="Anim_Directional.cpp" />
+    <ClCompile Include="Client_Entity_Manager.cpp" />
+    <ClCompile Include="Client_System_Manager.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="State_Game.cpp" />
+    <ClCompile Include="S_Movement.cpp" />
+    <ClCompile Include="S_Renderer.cpp" />
+    <ClCompile Include="S_SheetAnimation.cpp" />
     <ClCompile Include="View.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

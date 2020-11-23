@@ -6,17 +6,16 @@
 
 #pragma comment(lib, "msimg32")
 
-Window::Window(HWND l_hwnd) : m_hwnd(l_hwnd)
+Window::Window(HWND l_hwnd) : m_hwnd(l_hwnd), m_eventManager()
 {
 	RECT clientRect;
-	m_hdc = GetDC(m_hwnd);
-	m_tempDC = CreateCompatibleDC(m_hdc);
+	//m_hdc = GetDC(m_hwnd);
+	//m_tempDC = CreateCompatibleDC(m_hdc);
 	GetClientRect(l_hwnd, &clientRect);
 	m_view = GetDefaultView();
 	m_windowSize.first = clientRect.right;
 	m_windowSize.second = clientRect.bottom;
-	m_hbmBack = CreateCompatibleBitmap(m_hdc, clientRect.right, clientRect.bottom);
-	SelectObject(m_tempDC, m_hbmBack);
+	
 }
 
 
@@ -36,7 +35,15 @@ void Window::Update()
 
 void Window::BeginDraw()
 {
-	
+	RECT clientRect;
+	//m_hdc = GetDC(m_hwnd);
+	//m_tempDC = CreateCompatibleDC(m_hdc);
+	GetClientRect(m_hwnd, &clientRect);
+	m_hdc = GetDC(m_hwnd);
+	m_tempDC = CreateCompatibleDC(m_hdc);
+	m_bitmapDC = CreateCompatibleDC(m_hdc);
+	m_hbmBack = CreateCompatibleBitmap(m_hdc, clientRect.right, clientRect.bottom);
+	m_tempBm = (HBITMAP)SelectObject(m_tempDC, m_hbmBack);
 }
 
 
@@ -44,10 +51,25 @@ void Window::BeginDraw()
 void Window::EndDraw() 
 {
 	RECT rcClient;
+	bool isUp;
 	GetClientRect(m_hwnd, &rcClient);
 	//FillRect(m_tempDC, &rcClient, (HBRUSH)(BLACK_BRUSH));
+	
+	BeginPaint(m_hwnd, &m_ps);
+	if (!BitBlt(m_hdc, 0, 0, m_view.getSize().first, m_view.getSize().second, m_tempDC, 0, 0, SRCCOPY)) {
+		isUp = false;
+	}
+	else {
+		isUp = true;
+	}
+	EndPaint(m_hwnd, &m_ps);
 	InvalidateRect(m_hwnd, &rcClient, false);
-	ReleaseDC(m_hwnd, m_hdc);
+	SelectObject(m_tempDC, m_tempBm);
+	ReleaseDC(m_hwnd, m_tempDC);
+	DeleteDC(m_hdc);
+	DeleteDC(m_bitmapDC);
+	DeleteObject(m_hbmBack);
+	//ReleaseDC(m_hwnd, m_hdc);
 	//EndPaint(m_hwnd, &m_ps);
 }
 
@@ -64,16 +86,39 @@ View Window::GetDefaultView()
 
 void Window::Draw(int destX, int destY,  int heigth, int width, int srcX, int srcY, HBITMAP img)
 {
-	HDC hdc = GetCompatibleDC();
+	
+	/*HDC hdc;
+	if (!(hdc = CreateCompatibleDC(m_hdc))) 
+	{ 
+		DWORD a = GetLastError();
+		return; 
+	};*/
 	HBITMAP temp;
 	if (!GetObject(img, sizeof(BITMAP), &bm)) { return; }
-
-	if (!(temp = (HBITMAP)SelectObject(hdc, img))) { return; };
-	TransparentBlt(m_tempDC, destX, destY, heigth, width, hdc, srcX, srcY, heigth, width, TRANSPARENT_COLOR);
-	SelectObject(hdc, temp);
+	bool validated = true;
+	if (!(temp = (HBITMAP)SelectObject(m_bitmapDC, img)))
+	{ 
+		return;
+	};
+	if (!TransparentBlt(m_tempDC, destX, destY, heigth, width, m_bitmapDC, srcX, srcY, heigth, width, TRANSPARENT_COLOR)) {
+		validated = false;
+	}
+	SelectObject(m_bitmapDC, temp);
 	//DeleteObject(img);
 	//ReleaseDC(NULL, hdc);
 	//DeleteObject(hdc);
+}
+
+void Window::Draw(Sprite sprite)
+{
+	sf::IntRect tmpTextureRect = sprite.GetTextureRect();
+	Draw(sprite.GetPosition().first,
+		sprite.GetPosition().second,
+		tmpTextureRect.heigth, 
+		tmpTextureRect.width,
+		tmpTextureRect.x,
+		tmpTextureRect.y,
+		sprite.GetTexture());
 }
 
 LRESULT Window::ProcessEvents(HWND hWnd, UINT message,
@@ -95,11 +140,9 @@ LRESULT Window::ProcessEvents(HWND hWnd, UINT message,
 		PushEvent(event);
 		break;
 	case WM_PAINT:
-		if (this && m_tempDC && m_hdc) 
+		if (this && m_tempDC && m_hdc)
 		{
-			BeginPaint(hWnd, &m_ps);
-			BitBlt(m_hdc, 0, 0, m_view.getSize().first, m_view.getSize().second, m_tempDC, 0, 0, SRCCOPY);
-			EndPaint(hWnd, &m_ps);
+			
 		}
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
