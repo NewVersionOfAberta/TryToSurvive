@@ -1,0 +1,2 @@
+TileSheet media/texture/terrain1.bmp
+PlayerSprite media/texture/PlayerSheet.bmp
