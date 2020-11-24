@@ -15,7 +15,20 @@ Window::Window(HWND l_hwnd) : m_hwnd(l_hwnd), m_eventManager()
 	m_view = GetDefaultView();
 	m_windowSize.first = clientRect.right;
 	m_windowSize.second = clientRect.bottom;
-	
+	m_hdc = GetDC(m_hwnd);
+	m_tempDC = CreateCompatibleDC(m_hdc);
+	m_bitmapDC = CreateCompatibleDC(m_hdc);
+	m_hbmBack = CreateCompatibleBitmap(m_hdc, clientRect.right, clientRect.bottom);
+	m_tempBm = (HBITMAP)SelectObject(m_tempDC, m_hbmBack);
+}
+
+Window::~Window()
+{
+	SelectObject(m_tempDC, m_tempBm);
+	ReleaseDC(m_hwnd, m_tempDC);
+	DeleteDC(m_hdc);
+	DeleteDC(m_bitmapDC);
+	DeleteObject(m_hbmBack);
 }
 
 
@@ -39,11 +52,7 @@ void Window::BeginDraw()
 	//m_hdc = GetDC(m_hwnd);
 	//m_tempDC = CreateCompatibleDC(m_hdc);
 	GetClientRect(m_hwnd, &clientRect);
-	m_hdc = GetDC(m_hwnd);
-	m_tempDC = CreateCompatibleDC(m_hdc);
-	m_bitmapDC = CreateCompatibleDC(m_hdc);
-	m_hbmBack = CreateCompatibleBitmap(m_hdc, clientRect.right, clientRect.bottom);
-	m_tempBm = (HBITMAP)SelectObject(m_tempDC, m_hbmBack);
+	
 }
 
 
@@ -64,11 +73,6 @@ void Window::EndDraw()
 	}
 	EndPaint(m_hwnd, &m_ps);
 	InvalidateRect(m_hwnd, &rcClient, false);
-	SelectObject(m_tempDC, m_tempBm);
-	ReleaseDC(m_hwnd, m_tempDC);
-	DeleteDC(m_hdc);
-	DeleteDC(m_bitmapDC);
-	DeleteObject(m_hbmBack);
 	//ReleaseDC(m_hwnd, m_hdc);
 	//EndPaint(m_hwnd, &m_ps);
 }
@@ -112,8 +116,8 @@ void Window::Draw(int destX, int destY,  int heigth, int width, int srcX, int sr
 void Window::Draw(Sprite sprite)
 {
 	sf::IntRect tmpTextureRect = sprite.GetTextureRect();
-	Draw(sprite.GetPosition().first,
-		sprite.GetPosition().second,
+	Draw(sprite.GetPosition().first - m_view.getCenter().first + m_view.getSize().first / 2,
+		sprite.GetPosition().second - m_view.getCenter().second + m_view.getSize().second / 2,
 		tmpTextureRect.heigth, 
 		tmpTextureRect.width,
 		tmpTextureRect.x,

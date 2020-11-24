@@ -14,6 +14,7 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Collidable.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)C_Movable.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)C_State.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h" />

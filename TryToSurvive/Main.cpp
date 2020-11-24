@@ -3,6 +3,9 @@
 #include "Window.h"
 #include "Game.h"
 
+#define FPS 30
+
+
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 VOID OnPaint(HWND hWnd)
@@ -65,9 +68,15 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
             }
         }
         else {
-            game.Update();
-            game.Render();
-            game.LateUpdate();
+            if (game.GetElapsed() > (1.0 / FPS * 1000000)) {
+                game.Update();
+                game.Render();
+                game.LateUpdate();
+            }
+            else {
+                DWORD delay = (1.0 / FPS * 1000) - game.GetElapsed() / 1000;
+                Sleep(delay);
+            }
         }
     }
     return msg.wParam;

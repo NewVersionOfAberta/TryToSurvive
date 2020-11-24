@@ -7,7 +7,7 @@ ClientSystemManager::ClientSystemManager(TextureManager* l_textureMgr/*, FontMan
 	AddSystem<S_State>(System::State);
 	AddSystem<S_Control>(System::Control);
 	AddSystem<S_Movement>(System::Movement);
-	//AddSystem<S_Collision>(System::Collision);
+	AddSystem<S_Collision>(System::Collision);
 	AddSystem<S_SheetAnimation>(System::SheetAnimation);
 	//AddSystem<S_Network>(System::Network);
 	//AddSystem<S_Sound>(System::Sound);

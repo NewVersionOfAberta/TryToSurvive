@@ -55,7 +55,7 @@ void Game::Render() {
 	// Render here.
 	m_stateManager.Draw();
 	//View currentView = m_window.GetView();
-	m_window.SetView(m_window.GetDefaultView());
+	//m_window.SetView(m_window.GetDefaultView());
 	//m_guiManager.Render(m_window.GetRenderWindow());
 	//m_window.GetRenderWindow()->setView(currentView);
 

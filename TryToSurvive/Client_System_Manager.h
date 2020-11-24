@@ -5,7 +5,7 @@
 #include "S_Movement.h"
 #include "TextureManager.h"
 #include "S_Control.h"
-//#include "S_Collision.h"
+#include "S_Collision.h"
 #include "S_State.h"
 //#include "S_Sound.h"
 #include "S_SheetAnimation.h"

@@ -7,7 +7,7 @@ ClientEntityManager::ClientEntityManager(SystemManager* l_sysMgr,
 	AddComponentType<C_Position>(Component::Position);
 	AddComponentType<C_State>(Component::State);
 	AddComponentType<C_Movable>(Component::Movable);
-	//AddComponentType<C_Collidable>(Component::Collidable);
+	AddComponentType<C_Collidable>(Component::Collidable);
 	AddComponentType<C_SpriteSheet>(Component::SpriteSheet);
 	/*AddComponentType<C_SoundEmitter>(Component::SoundEmitter);
 	AddComponentType<C_SoundListener>(Component::SoundListener);

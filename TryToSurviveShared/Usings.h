@@ -1,6 +1,9 @@
 #pragma once
-#include <vector>
 #include <Windows.h>
+#include <vector>
+
+#define max(a,b)            (((a) > (b)) ? (a) : (b))
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
 
 
 namespace sf {
@@ -20,12 +23,40 @@ namespace sf {
 			height = size.second;
 		}
 
-		bool intersects(FloatRect l_rect) {
+		bool intersects(const FloatRect l_rect) {
 			bool isLeftInX = (l_rect.left > left && l_rect.left < left + width);
 			bool isTopInY = l_rect.top > top && l_rect.top < top + height;
 			bool isRightInX = l_rect.left + l_rect.width > left && l_rect.left + width < left + width;
 			bool isBottomInY = l_rect.top + height > top && l_rect.top + height < top + height;
 			return (isLeftInX && isTopInY) || (isRightInX && isTopInY) || (isLeftInX && isBottomInY) || (isRightInX && isBottomInY);
+		}
+
+		bool intersects(const FloatRect& rectangle, FloatRect& intersection) {
+			float r1MinX = min(left, left + width);
+			float r1MaxX = max(left, left + width);
+			float r1MinY = min(top, (top + height));
+			float r1MaxY = max(top, (top + height));
+
+			float r2MinX = min(rectangle.left, (rectangle.left + rectangle.width));
+			float r2MaxX = max(rectangle.left, (rectangle.left + rectangle.width));
+			float r2MinY = min(rectangle.top, (rectangle.top + rectangle.height));
+			float r2MaxY = max(rectangle.top, (rectangle.top + rectangle.height));
+
+			float interLeft = max(r1MinX, r2MinX);
+			float interTop = max(r1MinY, r2MinY);
+			float interRight = min(r1MaxX, r2MaxX);
+			float interBottom = min(r1MaxY, r2MaxY);
+
+			if ((interLeft < interRight) && (interTop < interBottom))
+			{
+				intersection = FloatRect(Vector2f(interLeft, interTop), Vector2f(interRight - interLeft, interBottom - interTop));
+				return true;
+			}
+			else
+			{
+				intersection = FloatRect(Vector2f(0, 0), Vector2f(0, 0));
+				return false;
+			}
 		}
 
 		float left;

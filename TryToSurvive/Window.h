@@ -11,6 +11,7 @@ class Window
 {
 public:
 	Window(HWND l_hwnd);
+	~Window();
 
 	void Update();
 

@@ -22,6 +22,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)C_State.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)S_State.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)S_Control.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Collidable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)S_Base.cpp" />
