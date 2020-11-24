@@ -125,6 +125,17 @@ void Window::Draw(Sprite sprite)
 		sprite.GetTexture());
 }
 
+void Window::DrawEllipse(sf::Vector2f position, sf::Vector2u size)
+{
+	sf::Vector2f posOnScreen(position.first - m_view.getCenter().first + m_view.getSize().first / 2,
+		position.second - m_view.getCenter().second + m_view.getSize().second / 2);
+	Ellipse(m_tempDC, 
+		posOnScreen.first,
+		posOnScreen.second,
+		posOnScreen.first + size.first,
+		posOnScreen.second + size.second);
+}
+
 LRESULT Window::ProcessEvents(HWND hWnd, UINT message,
     WPARAM wParam, LPARAM lParam)
 {
@@ -143,11 +154,30 @@ LRESULT Window::ProcessEvents(HWND hWnd, UINT message,
 		event.key.code = GetKey(wParam);
 		PushEvent(event);
 		break;
-	case WM_PAINT:
-		if (this && m_tempDC && m_hdc)
-		{
-			
-		}
+	case WM_LBUTTONDOWN:
+	{
+		event.type = ttsv::Event::MouseButtonPressed;
+		event.mouseButton.button = ttsv::Event::btnLeft;
+		
+		 static_cast<INT16>(LOWORD(lParam)) ;
+		event.mouseButton.y = static_cast<INT16>(HIWORD(lParam)) ;
+		POINT p;
+		p.x = static_cast<INT16>(LOWORD(lParam));
+		p.y = static_cast<INT16>(HIWORD(lParam));
+		event.mouseButton.x = p.x + (m_view.getCenter().first - m_view.getSize().first / 2);
+		event.mouseButton.y = p.y + (m_view.getCenter().second - m_view.getSize().second / 2);
+		PushEvent(event);
+		break;
+	}
+	case WM_LBUTTONUP:
+	{
+		event.type = ttsv::Event::MouseButtonReleased;
+		event.mouseButton.button = ttsv::Event::btnLeft;
+		event.mouseButton.x = static_cast<INT16>(LOWORD(lParam));
+		event.mouseButton.y = static_cast<INT16>(HIWORD(lParam));
+		PushEvent(event);
+		break;
+	}
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}

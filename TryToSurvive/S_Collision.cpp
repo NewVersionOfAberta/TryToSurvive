@@ -79,6 +79,7 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 	int ToX = floor((EntityAABB.left + EntityAABB.width) / TileSize);
 	int FromY = floor(EntityAABB.top / TileSize);
 	int ToY = floor((EntityAABB.top + EntityAABB.height) / TileSize);
+	
 
 	for (int x = FromX; x <= ToX; ++x) {
 		for (int y = FromY; y <= ToY; ++y) {
@@ -103,7 +104,7 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 
 	for (auto& col : c) {
 		EntityAABB = l_col->GetCollidable();
-		if (!col.m_area) { continue; }
+		if (!col.m_tileBounds.intersects(EntityAABB)) { continue; }
 		/*int resolveX = 0;
 		int resolveY = 0;
 		if (EntityAABB.left > col.m_tileBounds.left + col.m_tileBounds.width 
@@ -134,6 +135,7 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 		float xDiff = (EntityAABB.left + (EntityAABB.width / 2)) - (col.m_tileBounds.left + (col.m_tileBounds.width / 2));
 		float yDiff = (EntityAABB.top + (EntityAABB.height / 2)) - (col.m_tileBounds.top + (col.m_tileBounds.height / 2));
 		float resolve = 0;
+		std::cout << "Collison Detected";
 		if (std::abs(xDiff) > std::abs(yDiff)) {
 			if (xDiff > 0) {
 				resolve = (col.m_tileBounds.left + TileSize) - EntityAABB.left;

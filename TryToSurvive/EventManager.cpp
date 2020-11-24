@@ -1,5 +1,6 @@
 #include "EventManager.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 #include "Utils.h"
 
 EventManager::EventManager()
@@ -57,19 +58,19 @@ void EventManager::HandleEvent(ttsv::Event& l_event) {
 					break;
 				}
 			}
-			//else if (ttsvEvent == EventType::MButtonDown || ttsvEvent == EventType::MButtonUp) {
-			//	if (e_itr.second.m_code == l_event.mouseButton.button) {
-			//		// Matching event/keystroke.
-			//		// Increase count.
-			//		bind->m_details.m_mouse.first = l_event.mouseButton.x;
-			//		bind->m_details.m_mouse.second = l_event.mouseButton.y;
-			//		if (bind->m_details.m_keyCode != -1) {
-			//			bind->m_details.m_keyCode = e_itr.second.m_code;
-			//		}
-			//		++(bind->c);
-			//		break;
-			//	}
-			//}
+			else if (ttsvEvent == EventType::MButtonDown) {
+				if (e_itr.second.m_code == l_event.mouseButton.button) {
+					// Matching event/keystroke.
+					// Increase count.
+					bind->m_details.m_mouse.first = l_event.mouseButton.x;
+					bind->m_details.m_mouse.second = l_event.mouseButton.y;
+					if (bind->m_details.m_keyCode != -1) {
+						bind->m_details.m_keyCode = e_itr.second.m_code;
+					}
+					bind->IncC();
+					break;
+				}
+			}
 			else {
 				// No need for additional checking.
 				if (ttsvEvent == EventType::MouseWheel) {
@@ -132,14 +133,14 @@ void EventManager::Update() {
 					bind->IncC();
 				}
 				break;
-			/*case(EventType::Mouse):
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Button(e_itr.second.m_code))) {
+			case(EventType::Mouse):
+				if (Mouse::IsButtonPressed(ttsv::Event::Button(e_itr.second.m_code))) {
 					if (bind->m_details.m_keyCode != -1) {
 						bind->m_details.m_keyCode = e_itr.second.m_code;
 					}
-					++(bind->c);
+					bind->IncC();
 				}
-				break;*/
+				break;
 			}
 		}
 

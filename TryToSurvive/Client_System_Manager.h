@@ -7,6 +7,7 @@
 #include "S_Control.h"
 #include "S_Collision.h"
 #include "S_State.h"
+#include "S_Bullets.h"
 //#include "S_Sound.h"
 #include "S_SheetAnimation.h"
 //#include "S_Sound.h"

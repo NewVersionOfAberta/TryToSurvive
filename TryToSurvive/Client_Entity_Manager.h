@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "C_Movable.h"
 #include "C_State.h"
 #include "Entity_Manager.h"
@@ -6,7 +7,8 @@
 #include "TextureManager.h"
 #include "C_SpriteSheet.h"
 #include "C_Collidable.h"
-#include <vector>
+#include "C_Shape.h"
+
 
 
 class SystemManager;

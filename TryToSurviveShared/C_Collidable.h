@@ -8,7 +8,7 @@ class C_Collidable : public C_Base {
 public:
 	C_Collidable() : C_Base(Component::Collidable),
 		m_origin(Origin::Mid_Bottom), m_collidingOnX(false),
-		m_collidingOnY(false)
+		m_collidingOnY(false), m_offset(0.0, 0.0)
 	{}
 
 	void ReadIn(std::stringstream& l_stream) {
@@ -30,7 +30,10 @@ public:
 		m_collidingOnY = false;
 	}
 
-	void SetCollidable(const sf::FloatRect& l_rect) { m_AABB = l_rect; }
+	void SetCollidable(const sf::FloatRect& l_rect) {
+		m_AABB = l_rect; 
+	}
+	
 	void SetOrigin(const Origin& l_origin) { m_origin = l_origin; }
 
 	void SetSize(const sf::Vector2f& l_vec) {
@@ -49,8 +52,8 @@ public:
 			m_AABB.top = l_vec.second - (m_AABB.height / 2) + m_offset.second;
 			break;
 		case(Origin::Mid_Bottom):
-			m_AABB.left = l_vec.first - (m_AABB.width / 2) + 20 + m_offset.first;
-			m_AABB.top = l_vec.second + m_AABB.height / 2 + m_offset.second;
+			m_AABB.left = l_vec.first + (m_AABB.width / 2) + m_offset.first;
+			m_AABB.top = l_vec.second + m_AABB.height + m_offset.second;
 			break;
 		}
 	}

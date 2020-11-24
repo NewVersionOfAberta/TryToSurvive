@@ -26,6 +26,7 @@ void State_Game::OnCreate() {
 		evMgr->AddCallback(StateType::Game, "Player_MoveRight", &State_Game::PlayerMove, this);
 		evMgr->AddCallback(StateType::Game, "Player_MoveUp", &State_Game::PlayerMove, this);
 		evMgr->AddCallback(StateType::Game, "Player_MoveDown", &State_Game::PlayerMove, this);
+		evMgr->AddCallback(StateType::Game, "Create_Bullet", &State_Game::PlayerAttack, this);
 
 		sf::Vector2u size = m_stateMgr->GetContext()->m_wind->GetWindowSize();
 		m_view.setSize(size.first, size.second);
@@ -71,7 +72,7 @@ void State_Game::OnDestroy() {
 void State_Game::Update(const sf::Time& l_time) {
 	//if (!m_client->IsConnected()) { m_stateMgr->Remove(StateType::Game); m_stateMgr->SwitchTo(StateType::MainMenu); return; }
 	SharedContext* context = m_stateMgr->GetContext();
-	UpdateCamera();
+	//UpdateCamera();
 
 	m_gameMap->Update(l_time / TO_SECONDS);
 	{
@@ -154,6 +155,18 @@ void State_Game::PlayerMove(EventDetails* l_details) {
 		msg.m_int = (int)Direction::Down;
 	}
 	msg.m_receiver = m_player;
+
+	m_stateMgr->GetContext()->m_systemManager->
+		GetMessageHandler()->Dispatch(msg);
+}
+
+void State_Game::PlayerAttack(EventDetails* l_details)
+{
+	Message msg((MessageType)EntityMessage::Attack);
+
+	msg.m_2f.m_x = l_details->m_mouse.first;
+	msg.m_2f.m_y = l_details->m_mouse.second;
+	//msg.m_receiver = m_bullets;
 
 	m_stateMgr->GetContext()->m_systemManager->
 		GetMessageHandler()->Dispatch(msg);

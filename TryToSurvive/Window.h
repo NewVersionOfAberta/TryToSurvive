@@ -31,6 +31,7 @@ public:
 	void SetWindow(HWND hwnd) { m_hwnd = hwnd; }
 	void Draw(int destX, int destY, int heigth, int width, int srcX, int srcY, HBITMAP img);
 	void Draw(Sprite sprite);
+	void DrawEllipse(sf::Vector2f position, sf::Vector2u size);
 	HDC GetCompatibleDC() { return CreateCompatibleDC(m_hdc); }
 
 private:

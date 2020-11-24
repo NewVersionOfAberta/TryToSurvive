@@ -10,7 +10,10 @@ S_Renderer::S_Renderer(SystemManager* l_systemMgr)
 	req.TurnOnBit((unsigned int)Component::SpriteSheet);
 	m_requiredComponents.push_back(req);
 	req.Clear();
-
+	req.TurnOnBit((unsigned int)Component::Position);
+	req.TurnOnBit((unsigned int)Component::Shape);
+	m_requiredComponents.push_back(req);
+	req.Clear();
 	m_systemManager->GetMessageHandler()->Subscribe(EntityMessage::Direction_Changed, this);
 }
 
@@ -25,7 +28,12 @@ void S_Renderer::Update(float l_dT) {
 		if (entities->HasComponent(entity, Component::SpriteSheet)) {
 			drawable = entities->GetComponent<C_Drawable>(entity, Component::SpriteSheet);
 		}
-		else { continue; }
+		else if (entities->HasComponent(entity, Component::Shape)) {
+			drawable = entities->GetComponent<C_Drawable>(entity, Component::Shape);
+		}
+		else {
+			continue;
+		}
 		drawable->UpdatePosition(position->GetPosition());
 	}
 }
@@ -58,8 +66,11 @@ void S_Renderer::Render(Window* l_wind, unsigned int l_layer)
 		if (position->GetElevation() < l_layer) { continue; }
 		if (position->GetElevation() > l_layer) { break; }
 		C_Drawable* drawable = nullptr;
-		if (!entities->HasComponent(entity, Component::SpriteSheet)) { continue; }
-		drawable = entities->GetComponent<C_Drawable>(entity, Component::SpriteSheet);
+		Component component;
+		if (!entities->HasComponent(entity, Component::SpriteSheet) 
+			&& !entities->HasComponent(entity, Component::Shape)) { continue; }
+		component = entities->HasComponent(entity, Component::SpriteSheet) ? Component::SpriteSheet : Component::Shape;
+		drawable = entities->GetComponent<C_Drawable>(entity, component);
 		sf::FloatRect drawableBounds;
 		drawableBounds.left = position->GetPosition().first - (drawable->GetSize().first / 2);
 		drawableBounds.top = position->GetPosition().second - drawable->GetSize().second;

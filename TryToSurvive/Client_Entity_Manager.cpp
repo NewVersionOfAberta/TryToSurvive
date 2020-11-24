@@ -9,6 +9,7 @@ ClientEntityManager::ClientEntityManager(SystemManager* l_sysMgr,
 	AddComponentType<C_Movable>(Component::Movable);
 	AddComponentType<C_Collidable>(Component::Collidable);
 	AddComponentType<C_SpriteSheet>(Component::SpriteSheet);
+	AddComponentType<C_Shape>(Component::Shape);
 	/*AddComponentType<C_SoundEmitter>(Component::SoundEmitter);
 	AddComponentType<C_SoundListener>(Component::SoundListener);
 	AddComponentType<C_Client>(Component::Client);
@@ -24,6 +25,7 @@ int ClientEntityManager::AddEntity(const std::string& l_entityFile, int l_id) {
 
 	std::ifstream file;
 	file.open(Utils::GetWorkingDirectory() + "media/Entities/" + l_entityFile + ".entity");
+	
 	if (!file.is_open()) {
 		std::cout << "! Failed to load entity: " << l_entityFile << std::endl;
 		return -1;

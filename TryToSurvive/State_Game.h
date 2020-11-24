@@ -21,7 +21,7 @@ public:
 
 	void MainMenu(EventDetails* l_details);
 	void PlayerMove(EventDetails* l_details);
-	//void PlayerAttack(EventDetails* l_details);
+	void PlayerAttack(EventDetails* l_details);
 
 	//void HandlePacket(const PacketID& l_id, sf::Packet& l_packet, Client* l_client);
 
@@ -31,6 +31,7 @@ private:
 	void UpdateCamera();
 	Map* m_gameMap;
 	int m_player;
+	//int m_bullets;
 	//Client* m_client;
 };
 
