@@ -105,33 +105,7 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 	for (auto& col : c) {
 		EntityAABB = l_col->GetCollidable();
 		if (!col.m_tileBounds.intersects(EntityAABB)) { continue; }
-		/*int resolveX = 0;
-		int resolveY = 0;
-		if (EntityAABB.left > col.m_tileBounds.left + col.m_tileBounds.width 
-			&& EntityAABB.left + EntityAABB.width < col.m_tileBounds.left + col.m_tileBounds.width)
-		{
-			resolveX = EntityAABB.left - (col.m_tileBounds.left + col.m_tileBounds.width);
-			m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_X);
-			l_col->CollideOnX();
-		}
-		else if (EntityAABB.left + EntityAABB.width > col.m_tileBounds.left && EntityAABB.left < col.m_tileBounds.left) {
-			resolveX = col.m_tileBounds.left - (EntityAABB.left + EntityAABB.width);
-			m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_X);
-			l_col->CollideOnX();
-		}
-		if (EntityAABB.top > col.m_tileBounds.top + col.m_tileBounds.height
-			&& EntityAABB.top + EntityAABB.height < col.m_tileBounds.top + col.m_tileBounds.width) {
-			resolveY = EntityAABB.top - (col.m_tileBounds.top + col.m_tileBounds.height);
-			m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_Y);
-			l_col->CollideOnY();
-		}
-		else if (EntityAABB.top + EntityAABB.height > col.m_tileBounds.top && EntityAABB.top < col.m_tileBounds.top) {
-			resolveY = col.m_tileBounds.top - (EntityAABB.top + EntityAABB.height);
-			m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_Y);
-			l_col->CollideOnY();
-		}
-		l_pos->MoveBy(resolveX, resolveY);
-		l_col->SetPosition(l_pos->GetPosition());*/
+		
 		float xDiff = (EntityAABB.left + (EntityAABB.width / 2)) - (col.m_tileBounds.left + (col.m_tileBounds.width / 2));
 		float yDiff = (EntityAABB.top + (EntityAABB.height / 2)) - (col.m_tileBounds.top + (col.m_tileBounds.height / 2));
 		float resolve = 0;

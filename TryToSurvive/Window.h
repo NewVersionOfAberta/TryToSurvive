@@ -29,21 +29,28 @@ public:
 	bool IsFocused();
 	View GetDefaultView();
 	void SetWindow(HWND hwnd) { m_hwnd = hwnd; }
-	void Draw(int destX, int destY, int heigth, int width, int srcX, int srcY, HBITMAP img);
+	void Draw(int destX, int destY, int width, int heigth, int srcX, int srcY, HBITMAP img);
 	void Draw(Sprite sprite);
 	void DrawEllipse(sf::Vector2f position, sf::Vector2u size);
 	HDC GetCompatibleDC() { return CreateCompatibleDC(m_hdc); }
+	void SetDelta(sf::Vector2f l_delta) { m_viewDelta = l_delta; }
+
 
 private:
 	ttsv::Event::Key GetKey(WPARAM key);
 	void PushEvent(ttsv::Event event);
 	bool PollEvent(ttsv::Event& event);
+	void DrawPrepared(int destX, int destY, int width, int heigth, int srcX, int srcY, HBITMAP img);
+	sf::Vector2f ConvertToScreen(const sf::Vector2f pos);
+	sf::FloatRect GetRect(sf::Vector2f center, sf::Vector2u size);
+
 	EventManager m_eventManager;
 
 
 	std::queue<ttsv::Event> m_events;
 	sf::Vector2u m_windowSize;
 	View m_view;
+	sf::Vector2i m_viewDelta;
 
 	HWND m_hwnd;
 	HDC m_hdc;

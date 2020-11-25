@@ -146,25 +146,24 @@ void Map::Draw(unsigned int l_layer) {
 	sf::Vector2i tileBegin(floor(viewSpace.left / Sheet::Tile_Size), floor(viewSpace.top / Sheet::Tile_Size));
 	sf::Vector2i tileEnd(ceil((viewSpace.left + viewSpace.width) / Sheet::Tile_Size),
 		ceil((viewSpace.top + viewSpace.height) / Sheet::Tile_Size));
-	int iter_x = 0;
-	int iter_y = 0;
+	m_context->m_wind->SetDelta(sf::Vector2f(tileBegin.first * Sheet::Tile_Size - viewSpace.left, tileBegin.second * Sheet::Tile_Size - viewSpace.top));
+
 	unsigned int count = 0;
-	for (int x = tileBegin.first; x <= tileEnd.first; ++x, ++iter_x) {
-		for (int y = tileBegin.second; y <= tileEnd.second; ++y, ++iter_y) {
+	for (int x = tileBegin.first - 1; x <= tileEnd.first + 1; ++x) {
+		for (int y = tileBegin.second - 1; y <= tileEnd.second + 1; ++y) {
 			Tile* tile = GetTile(x, y, l_layer);
 			if (!tile) { continue; }
 			m_context->m_wind->Draw(
-				iter_x * Sheet::Tile_Size,
-				iter_y * Sheet::Tile_Size,
+				x * Sheet::Tile_Size,
+				y * Sheet::Tile_Size,
 				Sheet::Tile_Size,
 				Sheet::Tile_Size,
 				tile->m_properties->m_x,
 				tile->m_properties->m_y,
 				tile->m_properties->m_bmp);
 			++count;
-			
+
 		}
-		iter_y = 0;
 	}
 }
 

@@ -76,7 +76,8 @@ void S_Renderer::Render(Window* l_wind, unsigned int l_layer)
 		drawableBounds.top = position->GetPosition().second - drawable->GetSize().second;
 		drawableBounds.width = drawable->GetSize().first;
 		drawableBounds.height = drawable->GetSize().second;
-		if (!l_wind->GetViewSpace().intersects(drawableBounds)) { continue; }
+		sf::FloatRect intersection;
+		if (!l_wind->GetViewSpace().intersects(drawableBounds, intersection)) { continue; }
 		drawable->Draw(l_wind);
 	}
 }

@@ -52,8 +52,8 @@ public:
 			m_AABB.top = l_vec.second - (m_AABB.height / 2) + m_offset.second;
 			break;
 		case(Origin::Mid_Bottom):
-			m_AABB.left = l_vec.first + (m_AABB.width / 2) + m_offset.first;
-			m_AABB.top = l_vec.second + m_AABB.height + m_offset.second;
+			m_AABB.left = l_vec.first + (m_AABB.width / 2);// + m_offset.first;
+			m_AABB.top = l_vec.second + m_AABB.height; //+ m_offset.second;
 			break;
 		}
 	}

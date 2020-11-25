@@ -4,6 +4,8 @@
 #include "Event.h"
 #include "Usings.h"
 
+#define MAP_OFFSET 64
+
 #pragma comment(lib, "msimg32")
 
 Window::Window(HWND l_hwnd) : m_hwnd(l_hwnd), m_eventManager()
@@ -13,13 +15,15 @@ Window::Window(HWND l_hwnd) : m_hwnd(l_hwnd), m_eventManager()
 	//m_tempDC = CreateCompatibleDC(m_hdc);
 	GetClientRect(l_hwnd, &clientRect);
 	m_view = GetDefaultView();
+	sf::Vector2u mapViewSize(m_view.getSize().first + MAP_OFFSET, m_view.getSize().second + MAP_OFFSET);
 	m_windowSize.first = clientRect.right;
 	m_windowSize.second = clientRect.bottom;
 	m_hdc = GetDC(m_hwnd);
 	m_tempDC = CreateCompatibleDC(m_hdc);
 	m_bitmapDC = CreateCompatibleDC(m_hdc);
-	m_hbmBack = CreateCompatibleBitmap(m_hdc, clientRect.right, clientRect.bottom);
+	m_hbmBack = CreateCompatibleBitmap(m_hdc, mapViewSize.first + 64, mapViewSize.second + 64);
 	m_tempBm = (HBITMAP)SelectObject(m_tempDC, m_hbmBack);
+	
 }
 
 Window::~Window()
@@ -88,15 +92,8 @@ View Window::GetDefaultView()
 	return View(sf::Vector2f(clientRect.right / 2.0, clientRect.bottom / 2.0), sf::Vector2f(clientRect.right, clientRect.bottom));
 }
 
-void Window::Draw(int destX, int destY,  int heigth, int width, int srcX, int srcY, HBITMAP img)
+void Window::DrawPrepared(int destX, int destY,  int width, int heigth, int srcX, int srcY, HBITMAP img)
 {
-	
-	/*HDC hdc;
-	if (!(hdc = CreateCompatibleDC(m_hdc))) 
-	{ 
-		DWORD a = GetLastError();
-		return; 
-	};*/
 	HBITMAP temp;
 	if (!GetObject(img, sizeof(BITMAP), &bm)) { return; }
 	bool validated = true;
@@ -104,20 +101,26 @@ void Window::Draw(int destX, int destY,  int heigth, int width, int srcX, int sr
 	{ 
 		return;
 	};
-	if (!TransparentBlt(m_tempDC, destX, destY, heigth, width, m_bitmapDC, srcX, srcY, heigth, width, TRANSPARENT_COLOR)) {
+	if (!TransparentBlt(m_tempDC, destX, destY, width, heigth, m_bitmapDC, srcX, srcY, width, heigth, TRANSPARENT_COLOR)) {
 		validated = false;
 	}
 	SelectObject(m_bitmapDC, temp);
-	//DeleteObject(img);
-	//ReleaseDC(NULL, hdc);
-	//DeleteObject(hdc);
+}
+
+
+
+void Window::Draw(int destX, int destY, int width, int heigth, int srcX, int srcY, HBITMAP img)
+{
+	DrawPrepared(destX - m_view.getCenter().first + m_view.getSize().first / 2, destY - m_view.getCenter().second + m_view.getSize().second / 2,
+		width, heigth, srcX, srcY, img);
 }
 
 void Window::Draw(Sprite sprite)
 {
+	sf::Vector2f posOnScreen = ConvertToScreen(sprite.GetPosition());
 	sf::IntRect tmpTextureRect = sprite.GetTextureRect();
-	Draw(sprite.GetPosition().first - m_view.getCenter().first + m_view.getSize().first / 2,
-		sprite.GetPosition().second - m_view.getCenter().second + m_view.getSize().second / 2,
+	DrawPrepared(posOnScreen.first,
+		posOnScreen.second,
 		tmpTextureRect.heigth, 
 		tmpTextureRect.width,
 		tmpTextureRect.x,
@@ -127,8 +130,7 @@ void Window::Draw(Sprite sprite)
 
 void Window::DrawEllipse(sf::Vector2f position, sf::Vector2u size)
 {
-	sf::Vector2f posOnScreen(position.first - m_view.getCenter().first + m_view.getSize().first / 2,
-		position.second - m_view.getCenter().second + m_view.getSize().second / 2);
+	sf::Vector2f posOnScreen = ConvertToScreen(position);
 	Ellipse(m_tempDC, 
 		posOnScreen.first,
 		posOnScreen.second,
@@ -187,13 +189,7 @@ LRESULT Window::ProcessEvents(HWND hWnd, UINT message,
 
 
 sf::FloatRect Window::GetViewSpace() {
-	sf::Vector2f viewCenter(m_view.getCenter());
-	sf::Vector2f viewSize(m_view.getSize());
-	sf::Vector2f viewSizeHalf(viewSize.first / 2, viewSize.second / 2);
-	viewCenter.first -= viewSizeHalf.first;
-	viewCenter.second -= viewSizeHalf.second;
-	sf::FloatRect viewSpace(viewCenter, viewSize);
-	return viewSpace;
+	return GetRect(m_view.getCenter(), m_view.getSize());
 }
 
 EventManager* Window::GetEventManager()
@@ -238,5 +234,18 @@ bool Window::PollEvent(ttsv::Event& event)
 	{
 		return false;
 	}
+}
+
+sf::Vector2f Window::ConvertToScreen(const sf::Vector2f pos)
+{
+	return sf::Vector2f(pos.first - m_view.getCenter().first + m_view.getSize().first / 2, 
+		pos.second - m_view.getCenter().second + m_view.getSize().second / 2);
+}
+
+sf::FloatRect Window::GetRect(sf::Vector2f center, sf::Vector2u size)
+{
+	sf::Vector2f leftTop(center.first - size.first / 2, center.second - size.second / 2);
+	sf::FloatRect viewSpace(leftTop, size);
+	return viewSpace;
 }
 

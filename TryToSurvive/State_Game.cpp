@@ -72,7 +72,7 @@ void State_Game::OnDestroy() {
 void State_Game::Update(const sf::Time& l_time) {
 	//if (!m_client->IsConnected()) { m_stateMgr->Remove(StateType::Game); m_stateMgr->SwitchTo(StateType::MainMenu); return; }
 	SharedContext* context = m_stateMgr->GetContext();
-	//UpdateCamera();
+	UpdateCamera();
 
 	m_gameMap->Update(l_time / TO_SECONDS);
 	{
@@ -90,7 +90,7 @@ void State_Game::UpdateCamera() {
 	context->m_wind->SetView(m_view);
 
 	sf::FloatRect viewSpace = context->m_wind->GetViewSpace();
-	/*if (viewSpace.left <= 0) {
+	if (viewSpace.left <= 0) {
 		m_view.setCenter(viewSpace.width / 2, m_view.getCenter().second);
 		context->m_wind->SetView(m_view);
 	}
@@ -106,7 +106,7 @@ void State_Game::UpdateCamera() {
 	else if (viewSpace.top + viewSpace.height > (m_gameMap->GetMapSize().second) * Sheet::Tile_Size) {
 		m_view.setCenter(m_view.getCenter().first, ((m_gameMap->GetMapSize().second) * Sheet::Tile_Size) - (viewSpace.height / 2));
 		context->m_wind->SetView(m_view);
-	}*/
+	}
 
 	// Debug.
 	/*if (context->m_debugOverlay.Debug()) {
