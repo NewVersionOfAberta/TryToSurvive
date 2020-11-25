@@ -91,7 +91,9 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 				sf::FloatRect Intersection;
 				EntityAABB.intersects(TileAABB, Intersection);
 				float S = Intersection.width * Intersection.height;
-				c.emplace_back(S, t->m_properties, TileAABB);
+				if (S > 0.1) {
+					c.emplace_back(S, t->m_properties, TileAABB);
+				}
 				break;
 			}
 		}
@@ -104,7 +106,7 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 
 	for (auto& col : c) {
 		EntityAABB = l_col->GetCollidable();
-		if (!col.m_tileBounds.intersects(EntityAABB)) { continue; }
+		//if (!col.m_tileBounds.intersects(EntityAABB)) { continue; }
 		
 		float xDiff = (EntityAABB.left + (EntityAABB.width / 2)) - (col.m_tileBounds.left + (col.m_tileBounds.width / 2));
 		float yDiff = (EntityAABB.top + (EntityAABB.height / 2)) - (col.m_tileBounds.top + (col.m_tileBounds.height / 2));
