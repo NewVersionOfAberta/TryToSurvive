@@ -1,6 +1,6 @@
 #include "C_Shape.h"
 
-C_Shape::C_Shape() : C_Drawable(Component::Shape)
+C_Shape::C_Shape() : C_Drawable(Component::Shape), m_size(20, 20)
 {
 }
 

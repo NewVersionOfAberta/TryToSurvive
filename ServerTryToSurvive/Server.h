@@ -9,6 +9,7 @@
 #include <functional>
 #include <iostream>
 #include <thread>
+#include <mutex>
 
 #define HEARTBEAT_INTERVAL 1000 // ms.
 #define HEARTBEAT_RETRIES 25
@@ -49,7 +50,7 @@ public:
 	Server(void(T::*l_handler)(UINT32&, const PortNumber&, const PacketID&, Packet&, Server*),
 		T* l_instance) : m_running(false)
 	{
-		InitializeCriticalSection(&m_mutex);
+		//InitializeCriticalSection(&m_mutex);
 		m_packetHandler = std::bind(l_handler, l_instance,
 			std::placeholders::_1, std::placeholders::_2, std::placeholders::_3,
 			std::placeholders::_4, std::placeholders::_5);
@@ -88,7 +89,8 @@ public:
 	unsigned int GetClientCount();
 	std::string GetClientList();
 
-	CRITICAL_SECTION& GetMutex();
+	void Lock();
+	void Unlock();
 private:
 	void Setup();
 	ClientID m_lastID;
@@ -105,7 +107,7 @@ private:
 	bool m_running;
 
 	std::thread m_listenThread;
-	CRITICAL_SECTION m_mutex;
+	std::mutex m_mutex;
 
 	size_t m_totalSent;
 	size_t m_totalReceived;

@@ -7,6 +7,7 @@
 #include "S_Network.h"
 #include "S_Combat.h"
 #include "S_Timers.h"
+#include "S_Bullets.h"
 
 class ServerSystemManager : public SystemManager{
 public:

@@ -3,12 +3,10 @@
 
 Client::Client()
 {
-	InitializeCriticalSection(&m_mutex);
 }
 Client::~Client()
 { 
 	m_socket.unbind();
-	DeleteCriticalSection(&m_mutex);
 }
 
 bool Client::Connect(){
@@ -155,7 +153,6 @@ void Client::Update(const sf::Time& l_time){
 bool Client::IsConnected()const{ return m_connected; }
 void Client::SetPlayerName(const std::string& l_name){ m_playerName = l_name; }
 
-CRITICAL_SECTION& Client::GetMutex(){ return m_mutex; }
 
 void Client::Setup(void(*l_handler)(const PacketID&, Packet&, Client*)){
 	m_packetHandler = std::bind(l_handler,

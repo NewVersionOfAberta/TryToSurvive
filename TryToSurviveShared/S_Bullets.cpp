@@ -103,8 +103,8 @@ void S_Bullets::CreateBullet(sf::Vector2f mousePos, sf::Vector2f entityPos, Enti
 	collisionBullet->SetSize(sf::Vector2f(BULLET_WIDTH, BULLET_HEIGHT));
 	collisionBullet->SetOrigin(Origin::Top_Left);
 
-	C_Shape* shapeBullet = eMgr->GetComponent<C_Shape>(m_currId, Component::Shape);
+	/*C_Shape* shapeBullet = eMgr->GetComponent<C_Shape>(m_currId, Component::Shape);
 	if (!shapeBullet) { return; }
-	shapeBullet->SetSize(sf::Vector2u(BULLET_WIDTH, BULLET_HEIGHT));
+	shapeBullet->SetSize(sf::Vector2u(BULLET_WIDTH, BULLET_HEIGHT));*/
 	++m_currId;
 }

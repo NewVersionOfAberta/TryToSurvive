@@ -52,7 +52,10 @@ int EntityManager::AddEntity(const std::string& l_entityFile, int l_id) {
 			keystream >> set;
 			mask.SetMask(set);
 			EntityId = AddEntity(mask);
-			if (EntityId == -1) { return -1; }
+			if (EntityId == -1) {
+				file.close();
+				return -1; 
+			}
 		}
 		else if (type == "Component") {
 			if (EntityId == -1) { continue; }

@@ -2,7 +2,7 @@
 #include "S_Base.h"
 #include "C_Position.h"
 #include "C_Collidable.h"
-#include "C_Shape.h"
+//#include "C_Shape.h"
 #include "Usings.h"
 
 struct Bullet {
@@ -23,7 +23,7 @@ public:
 	void Update(float l_dT);
 	void HandleEvent(const EntityId& l_entity, const EntityEvent& l_event);
 	void Notify(const Message& l_message);
-	void SetPlayerId(int l_playerId) { m_playerId = l_playerId; }
+	void SetPlayerID(int l_playerId) { m_playerId = l_playerId; }
 
 private:
 	void CreateBullet(sf::Vector2f mousePos, sf::Vector2f entityPos, EntityManager* eMgr);

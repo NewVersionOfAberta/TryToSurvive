@@ -40,9 +40,10 @@ void S_Network::Update(float l_dT){
 				m_systemManager->GetMessageHandler()->Dispatch(msg);
 			}
 		}
-		if (player.m_attacking){
+		if (player.m_x > 0.0 || player.m_y > 0.0){
 			Message msg((MessageType)EntityMessage::Attack);
-			msg.m_receiver = entity;
+			msg.m_2f.m_x = player.m_x;
+			msg.m_2f.m_y = player.m_y;
 			m_systemManager->GetMessageHandler()->Dispatch(msg);
 		}
 	}
@@ -93,31 +94,35 @@ EntityId S_Network::GetEntityID(const ClientID& l_client){
 }
 
 void S_Network::CreateSnapshot(Packet& l_packet){
-	CRITICAL_SECTION l_mutex = m_server->GetMutex();
-	ttsv::Lock lock(l_mutex);
+	/*std::mutex* l_mutex = m_server->GetMutex();
+	ttsv::Lock lock(l_mutex);*/
+	m_server->Lock();
 	ServerEntityManager* e = (ServerEntityManager*)m_systemManager->GetEntityManager();
 	StampPacket(PacketType::Snapshot, l_packet);
 	l_packet << INT32(e->GetEntityCount());
 	if (e->GetEntityCount()){
 		e->DumpEntityInfo(l_packet);
 	}
+	m_server->Unlock();
 	//LEAVE
 }
 
 void S_Network::UpdatePlayer(Packet& l_packet, const ClientID& l_cid){
-	CRITICAL_SECTION l_mutex = m_server->GetMutex();
-	ttsv::Lock lock(l_mutex);
+	/*std::mutex* l_mutex = m_server->GetMutex();
+	ttsv::Lock lock(l_mutex);*/
+	m_server->Lock();
 	EntityId eid = GetEntityID(l_cid);
 	if (eid == -1){ 
+		m_server->Unlock();
 		//LEAVE
 		return; 
 	}
 	if (!HasEntity(eid)){
+		m_server->Unlock();
 		//LEAVE
 		return;
 	}
 	INT32 entity_message;
-	m_playerInput[eid].m_attacking = false;
 	while (l_packet >> entity_message){
 		switch (entity_message){
 		case (INT32)EntityMessage::Move:
@@ -131,9 +136,10 @@ void S_Network::UpdatePlayer(Packet& l_packet, const ClientID& l_cid){
 		}
 		case (INT32)EntityMessage::Attack:
 		{
-			INT32 attackState;
-			l_packet >> attackState;
-			if (attackState){ m_playerInput[eid].m_attacking = true; }
+			float m_x, m_y;
+			l_packet >> m_x >> m_y;
+			m_playerInput[eid].m_x = m_x;
+			m_playerInput[eid].m_y = m_y;
 			break;
 		}
 		}
@@ -143,5 +149,6 @@ void S_Network::UpdatePlayer(Packet& l_packet, const ClientID& l_cid){
 			break;
 		}
 	}
+	m_server->Unlock();
 	//LEAVE
 }

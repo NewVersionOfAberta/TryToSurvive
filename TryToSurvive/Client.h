@@ -2,6 +2,7 @@
 #include <functional>
 #include <iostream>
 #include <thread>
+#include <mutex>
 #include "NetworkDefinitions.h"
 #include "PacketTypes.h"
 #include "NetSettings.h"
@@ -43,7 +44,8 @@ public:
 	bool IsConnected() const;
 	void SetPlayerName(const std::string& l_name);
 
-	CRITICAL_SECTION& GetMutex();
+	void Lock() { m_mutex.lock(); }
+	void Unlock() { m_mutex.unlock(); }
 private:
 	std::string m_playerName;
 
@@ -56,5 +58,5 @@ private:
 	sf::Time m_lastHeartbeat;
 
 	std::thread m_listenThread;
-	CRITICAL_SECTION m_mutex;
+	std::mutex m_mutex;
 };

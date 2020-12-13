@@ -60,9 +60,7 @@ S_Network::~S_Network(){}
 
 void S_Network::Update(float l_dT){
 	if (!m_client){ return; }
-	CRITICAL_SECTION l_mutex = m_client->GetMutex();
-	Clock clock;
-	ttsv::Lock lock(l_mutex);
+	//m_client->Lock();
 	//std::cout << "S_Network::Update. Take lock at: " << clock.getCurrentTime() << std::endl;
 	m_playerUpdateTimer += Clock::millsAsSeconds(l_dT);
 	//std::cout << "Time (sec): " << m_playerUpdateTimer << " cur time (mills) " << l_dT << std::endl;
@@ -72,6 +70,7 @@ void S_Network::Update(float l_dT){
 	}
 	//std::cout << "S_Network::Update. Leave at: " << clock.getCurrentTime() << std::endl;
 	PerformInterpolation();
+	//m_client->Unlock();
 	//LEAVE
 }
 
@@ -83,7 +82,7 @@ void S_Network::Notify(const Message& l_message){
 	if (!HasEntity(l_message.m_receiver) || l_message.m_receiver != m_player){ 
 		return;
 	}
-	if (l_message.m_type == (MessageType)EntityMessage::Attack && m_outgoing.find(EntityMessage::Attack) != m_outgoing.end()){ return; }
+	//if (l_message.m_type == (MessageType)EntityMessage::Attack && m_outgoing.find(EntityMessage::Attack) != m_outgoing.end()){ return; }
 	m_outgoing[(EntityMessage)l_message.m_type].emplace_back(l_message);
 }
 
@@ -94,13 +93,12 @@ void S_Network::SetPlayerID(const EntityId& l_entity){ m_player = l_entity; }
 void S_Network::AddSnapshot(const EntityId& l_entity, 
 	const INT32& l_timestamp, EntitySnapshot& l_snapshot)
 {
-	CRITICAL_SECTION l_mutex = m_client->GetMutex();
-	Clock clock;
-	ttsv::Lock lock(l_mutex);
+	//m_client->Lock();
 	//std::cout << "S_Network::AddSnapshot. Take lock at: " << clock.getCurrentTime() << std::endl;
 	auto i = m_entitySnapshots.emplace(l_timestamp, SnapshotDetails());
 	i.first->second.m_snapshots.emplace(l_entity, l_snapshot);
 	//std::cout << "S_Network::AddSnapshot. Leave at: " << clock.getCurrentTime() << std::endl;
+	//m_client->Unlock();
 	//LEAVE
 }
 
@@ -114,9 +112,7 @@ void S_Network::ApplyEntitySnapshot(const EntityId& l_entity,
 	S_State* state_s = nullptr;
 	//C_Health* health = nullptr;
 	//C_Name* name = nullptr;
-	Clock clock;
-	CRITICAL_SECTION l_mutex = m_client->GetMutex();
-	ttsv::Lock lock(l_mutex);
+	//m_client->Lock();
 	//std::cout << "Network apply. Take lock at: " << clock.getCurrentTime() << std::endl;
 	if (position = entities->GetComponent<C_Position>(l_entity, Component::Position)){
 		//std::cout << "Position old: " << position->GetPosition().first << " : " << position->GetPosition().second << std::endl;
@@ -142,6 +138,7 @@ void S_Network::ApplyEntitySnapshot(const EntityId& l_entity,
 	if (name = entities->GetComponent<C_Name>(l_entity, Component::Name)){
 		name->SetName(l_snapshot.m_name);
 	}*/
+	//m_client->Unlock();
 	//LEAVE
 	//std::cout << "Network apply. Leave at: " << clock.getCurrentTime() << std::endl;
 }
@@ -149,6 +146,7 @@ void S_Network::ApplyEntitySnapshot(const EntityId& l_entity,
 void S_Network::SendPlayerOutgoing(){
 	INT32 p_x = 0, p_y = 0;
 	INT32 p_a = 0;
+	Packet packet;
 
 	for (auto &itr : m_outgoing){
 		if (itr.first == EntityMessage::Move){
@@ -173,13 +171,19 @@ void S_Network::SendPlayerOutgoing(){
 			}
 			if (!x && !y){ continue; }
 			p_x = x; p_y = y;
-		} else if (itr.first == EntityMessage::Attack){ p_a = 1; }
+		} else if (itr.first == EntityMessage::Attack)
+		{ 
+			for (auto& message : itr.second) {
+				
+				packet << INT32(EntityMessage::Attack) << message.m_2f.m_x << message.m_2f.m_y << INT32(Network::PlayerUpdateDelim);
+			}
+		}
 	}
 
-	Packet packet;
+	
 	StampPacket(PacketType::PlayerUpdate, packet);
 	packet << INT32(EntityMessage::Move) << p_x << p_y << INT32(Network::PlayerUpdateDelim);
-	packet << INT32(EntityMessage::Attack) << p_a << INT32(Network::PlayerUpdateDelim);
+	
 	m_client->Send(packet);
 	m_outgoing.clear();
 }
@@ -214,13 +218,12 @@ void S_Network::PerformInterpolation(){
 				if (snap2 == Snapshot2->second.m_snapshots.end()){
 					// Entity that exists in first snapshot wasn't found in second.
 					// Remove it, as it possibly de-spawned.
-					CRITICAL_SECTION l_mutex = m_client->GetMutex();
-					Clock clock;
-					ttsv::Lock lock(l_mutex);
+					m_client->Lock();
 					//std::cout << "Network interpol. Take lock at: " << clock.getCurrentTime() << std::endl;
 					entities->RemoveEntity(snap->first);
 					snap = Snapshot1->second.m_snapshots.erase(snap);
 					//LEAVE
+					m_client->Unlock();
 					//std::cout << "Network interpol. Leave at: " << clock.getCurrentTime() << std::endl;
 					continue;
 				}

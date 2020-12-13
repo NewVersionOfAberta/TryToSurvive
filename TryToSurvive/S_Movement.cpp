@@ -26,7 +26,7 @@ void S_Movement::Update(float l_dT) {
 	l_dT /= 1000;
 	EntityManager* entities = m_systemManager->GetEntityManager();
 	for (auto& entity : m_entities) {
-		//std::cout << "Entity id: " << entity << std::endl;
+		std::cout << "Entity id: " << entity << std::endl;
 		C_Position* position = entities->GetComponent<C_Position>(entity, Component::Position);
 		C_Movable* movable = entities->GetComponent<C_Movable>(entity, Component::Movable);
 		//temp
@@ -34,9 +34,7 @@ void S_Movement::Update(float l_dT) {
 		//std::cout << "Velocity before step: " << velocity.first << " : " << velocity.second << std::endl;
 		MovementStep(l_dT, movable, position);
 		velocity = movable->GetVelocity();
-		//std::cout << "Velocity after step: " << velocity.first << " : " << velocity.second << std::endl;
-	/*	velocity.first *= l_dT;
-		velocity.second *= l_dT;*/
+	
 		position->MoveBy(velocity.first * l_dT, velocity.second * l_dT);
 		//std::cout << "Position: " << position->GetPosition().first << " : " << position->GetPosition().second << std::endl;
 	}

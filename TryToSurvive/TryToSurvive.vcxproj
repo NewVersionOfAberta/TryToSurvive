@@ -165,7 +165,6 @@
     <ClInclude Include="SpriteSheet.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="State_Game.h" />
-    <ClInclude Include="S_Bullets.h" />
     <ClInclude Include="S_Collision.h" />
     <ClInclude Include="S_Movement.h" />
     <ClInclude Include="S_Network.h" />
@@ -189,7 +188,6 @@
     <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="State_Game.cpp" />
-    <ClCompile Include="S_Bullets.cpp" />
     <ClCompile Include="S_Collision.cpp" />
     <ClCompile Include="S_Movement.cpp" />
     <ClCompile Include="S_Network.cpp" />

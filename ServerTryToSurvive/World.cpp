@@ -25,11 +25,12 @@ void World::Update(const sf::Time& l_time){
 	m_snapshotTimer += l_time;
 	m_tpsTime += l_time;
 	m_server.Update(l_time);
-	CRITICAL_SECTION l_mutex = m_server.GetMutex();
-	ttsv::Lock lock(l_mutex);
+	/*std::mutex* l_mutex = m_server.GetMutex();
+	l_mutex->lock();*/
+	m_server.Lock();
 	//std::cout << "In lock world update" << std::endl;
 	m_systems.Update(Clock::millsAsSeconds(l_time));
-	lock.unlock();
+	m_server.Unlock();
 	//std::cout << "Out lock world update" << std::endl;
 	//LEAVE
 	if (m_snapshotTimer >= SNAPSHOT_INTERVAL){
@@ -73,12 +74,14 @@ void World::HandlePacket(UINT32& l_ip, const PortNumber& l_port,
 			l_server->Send(l_ip, l_port, packet);
 			return;
 		}
-		CRITICAL_SECTION l_mutex = m_server.GetMutex();
-		ttsv::Lock lock(l_mutex);
+		/*std::mutex* l_mutex = m_server.GetMutex();
+		ttsv::Lock lock(l_mutex);*/
+		m_server.Lock();
 		std::cout << "In lock world handle" << std::endl;
 		INT32 eid = m_entities.AddEntity("Player");
 		std::cout << "New client! Add entity -" << eid << std::endl;
 		if (eid == -1){
+			m_server.Unlock();
 			//LEAVE
 			return;
 		}
@@ -93,17 +96,21 @@ void World::HandlePacket(UINT32& l_ip, const PortNumber& l_port,
 		if (!l_server->Send(cid, packet)){
 			std::cout << "Unable to respond to connect packet!" << std::endl;
 			//LEAVE
+			m_server.Unlock();
 			return;
 		}
+		m_server.Unlock();
 		//LEAVE
 	}
 }
 
 void World::ClientLeave(const ClientID& l_client){
-	CRITICAL_SECTION l_mutex = m_server.GetMutex();
-	ttsv::Lock lock(l_mutex);
+	/*std::mutex* l_mutex = m_server.GetMutex();
+	ttsv::Lock lock(l_mutex);*/
+	m_server.Lock();
 	S_Network* network = m_systems.GetSystem<S_Network>(System::Network);
 	m_entities.RemoveEntity(network->GetEntityID(l_client));
+	m_server.Unlock();
 	//LEAVE
 }
 
@@ -118,9 +125,11 @@ void World::CommandLine(){
 		} else if (str == "disconnectall"){
 			std::cout << "Disconnecting all clients..." << std::endl;
 			m_server.DisconnectAll();
-			CRITICAL_SECTION l_mutex = m_server.GetMutex();
-			ttsv::Lock lock(l_mutex);
+			/*std::mutex* l_mutex = m_server.GetMutex();
+			ttsv::Lock lock(l_mutex);*/
+			m_server.Lock();
 			m_entities.Purge();
+			m_server.Unlock();
 			//LEAVE
 		} else if (str.find("tps") != std::string::npos){
 			std::cout << "TPS: " << m_tps << std::endl;

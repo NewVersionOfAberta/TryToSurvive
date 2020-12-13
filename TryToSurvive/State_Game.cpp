@@ -78,11 +78,11 @@ void State_Game::Update(const sf::Time& l_time) {
 
 	m_gameMap->Update(l_time);
 	{
-		CRITICAL_SECTION l_mutex = m_client->GetMutex();
 		Clock clock;
-		//ttsv::Lock lock(l_mutex);
+		m_client->Lock();
 		//std::cout << "Game Update. Take lock at: " << clock.getCurrentTime() << std::endl;
 		context->m_systemManager->Update(l_time);
+		m_client->Unlock();
 		//std::cout << "Game Update. Leave at: " << clock.getCurrentTime() << std::endl;
 		//LEAVE
 	}
@@ -133,15 +133,14 @@ void State_Game::UpdateCamera() {
 
 void State_Game::Draw() {
 	if (!m_gameMap) { return; }
-	CRITICAL_SECTION l_mutex = m_client->GetMutex();
-	Clock clock;
-	ttsv::Lock lock(l_mutex);
+	m_client->Lock();
 	//std::cout << "State Game Draw/Take lock at: " << clock.getCurrentTime() << std::endl;
 	m_gameMap->DrawBackground(m_stateMgr->GetContext()->m_wind->GetViewSpace());
 	for (int i = 0; i < Sheet::Num_Layers; ++i) {
 		m_gameMap->Draw(i);
 		m_stateMgr->GetContext()->m_systemManager->Draw(m_stateMgr->GetContext()->m_wind, i);
 	}
+	m_client->Unlock();
 	//std::cout << "State Game Draw/Leave at: " << clock.getCurrentTime() << std::endl;
 	//LEAVE
 }
@@ -198,16 +197,15 @@ void State_Game::HandlePacket(const PacketID& l_id, Packet& l_packet, Client* l_
 			return;
 		}
 		std::cout << "Adding entity: " << eid << std::endl;
-		CRITICAL_SECTION l_mutex = m_client->GetMutex();
-		Clock clock;
-		ttsv::Lock lock(l_mutex);
+		m_client->Lock();
 		emgr->AddEntity("Player", eid);
 		emgr->GetComponent<C_Position>(eid, Component::Position)->SetPosition(pos);
-		lock.unlock();
+		m_client->Unlock();
 		std::cout << "Connect packet. Position: " << pos.first << " : " << pos.second << std::endl;
 		//LEAVE
 		m_player = eid;
 		m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Network>(System::Network)->SetPlayerID(m_player);
+		m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Bullets>(System::Bullets)->SetPlayerID(m_player);
 		//emgr->AddComponent(eid, Component::SoundListener);
 		return;
 	}
@@ -222,9 +220,7 @@ void State_Game::HandlePacket(const PacketID& l_id, Packet& l_packet, Client* l_
 			std::cout << "Snapshot extraction failed." << std::endl; 
 			return; 
 		}
-		CRITICAL_SECTION l_mutex = m_client->GetMutex();
-		Clock clock;
-		ttsv::Lock lock(l_mutex);
+		m_client->Lock();
 		//std::cout << "State Game Packet/ Take lock at: " << clock.getCurrentTime() << std::endl;
 		INT32 t = m_client->GetTime();
 		for (unsigned int i = 0; i < entityCount; ++i) {
@@ -234,12 +230,14 @@ void State_Game::HandlePacket(const PacketID& l_id, Packet& l_packet, Client* l_
 			{
 				std::cout << "Snapshot extraction failed." << std::endl;
 				//std::cout << "State Game Packet/Leave at: " << clock.getCurrentTime() << std::endl;
+				m_client->Unlock();
 				//LEAVE
 				return; 
 			}
 			m_stateMgr->GetContext()->m_systemManager->
 				GetSystem<S_Network>(System::Network)->AddSnapshot(eid, t, snapshot);
 		}
+		m_client->Unlock();
 		//std::cout << "State Game Packet/Leave at: " << clock.getCurrentTime() << std::endl;
 		//LEAVE
 		break;

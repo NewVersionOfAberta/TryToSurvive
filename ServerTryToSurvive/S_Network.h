@@ -15,8 +15,9 @@
 struct PlayerInput{
 	int m_movedX;
 	int m_movedY;
-	bool m_attacking;
-	PlayerInput() :m_movedX(0), m_movedY(0), m_attacking(false){}
+	float m_x;
+	float m_y;
+	PlayerInput() :m_movedX(0), m_movedY(0), m_x(0.0), m_y(0.0){}
 };
 
 using PlayerInputContainer = std::unordered_map<EntityId, PlayerInput>;
