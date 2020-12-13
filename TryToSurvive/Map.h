@@ -68,15 +68,19 @@ public:
 
 	void Update(float l_dT);
 	void Draw(unsigned int l_layer);
+	void DrawBackground(sf::FloatRect viewSpace);
 private:
 	// Method for converting 2D coordinates to 1D ints.
 	unsigned int ConvertCoords(unsigned int l_x, unsigned int l_y, unsigned int l_layer)const;
 
 	void LoadTiles(const std::string& l_path);
+	void LoadBackground();
+	
 
 	void PurgeMap();
 	void PurgeTileSet();
 
+	HBITMAP m_background;
 	TileSet m_tileSet;
 	TileMap m_tileMap;
 	HDC m_tileSheet;

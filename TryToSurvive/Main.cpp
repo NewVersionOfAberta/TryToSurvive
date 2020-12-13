@@ -3,7 +3,7 @@
 #include "Window.h"
 #include "Game.h"
 
-#define FPS 30
+#define FPS 60
 
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -72,7 +72,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
         hInstance,                // program instance handle
         NULL);                    // creation parameters
 
-    //CreateConsole();
+    CreateConsole();
     Game game(hWnd);
     m_game = &game;
 
@@ -91,7 +91,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
             }
         }
         else {
-            if (game.GetElapsed() > (1.0 / FPS * 1000000)) {
+           if (game.GetElapsed() > (1.0 / FPS * 1000)) {
                 game.Update();
                 game.Render();
                 game.LateUpdate();

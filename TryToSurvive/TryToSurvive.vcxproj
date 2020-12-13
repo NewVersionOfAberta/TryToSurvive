@@ -87,12 +87,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -143,9 +145,9 @@
     <ClInclude Include="Anim_Base.h" />
     <ClInclude Include="Anim_Directional.h" />
     <ClInclude Include="BaseState.h" />
+    <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Entity_Manager.h" />
     <ClInclude Include="Client_System_Manager.h" />
-    <ClInclude Include="Clock.h" />
     <ClInclude Include="C_Drawable.h" />
     <ClInclude Include="C_Shape.h" />
     <ClInclude Include="C_SpriteSheet.h" />
@@ -156,6 +158,7 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="NetSettings.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SharedContext.h" />
     <ClInclude Include="Sprite.h" />
@@ -165,6 +168,7 @@
     <ClInclude Include="S_Bullets.h" />
     <ClInclude Include="S_Collision.h" />
     <ClInclude Include="S_Movement.h" />
+    <ClInclude Include="S_Network.h" />
     <ClInclude Include="S_Renderer.h" />
     <ClInclude Include="S_SheetAnimation.h" />
     <ClInclude Include="TextureManager.h" />
@@ -174,9 +178,9 @@
   <ItemGroup>
     <ClCompile Include="Anim_Base.cpp" />
     <ClCompile Include="Anim_Directional.cpp" />
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Client_Entity_Manager.cpp" />
     <ClCompile Include="Client_System_Manager.cpp" />
-    <ClCompile Include="Clock.cpp" />
     <ClCompile Include="C_Shape.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -188,6 +192,7 @@
     <ClCompile Include="S_Bullets.cpp" />
     <ClCompile Include="S_Collision.cpp" />
     <ClCompile Include="S_Movement.cpp" />
+    <ClCompile Include="S_Network.cpp" />
     <ClCompile Include="S_Renderer.cpp" />
     <ClCompile Include="S_SheetAnimation.cpp" />
     <ClCompile Include="View.cpp" />

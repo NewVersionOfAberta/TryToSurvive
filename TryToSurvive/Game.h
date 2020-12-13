@@ -6,6 +6,7 @@
 #include "StateManager.h"
 #include "Entity_Manager.h"
 #include "System_Manager.h"
+#include "Client.h"
 #include "Clock.h"
 
 
@@ -27,6 +28,7 @@ private:
 	sf::Time m_elapsed;
 	SharedContext m_context;
 	Window m_window;
+	Client m_client;
 	StateManager m_stateManager;
 	ClientEntityManager m_entityManager;
 	ClientSystemManager m_systemManager;

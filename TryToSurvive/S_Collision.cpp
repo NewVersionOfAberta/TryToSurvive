@@ -29,6 +29,7 @@ void S_Collision::Update(float l_dT) {
 		collidable->ResetCollisionFlags();
 		CheckOutOfBounds(position, collidable);
 		MapCollisions(entity, position, collidable);
+		//std::cout << "Position: " << position->GetPosition().first << position->GetPosition().second << std::endl;
 	}
 	//EntityCollisions();
 }
@@ -139,5 +140,9 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 	}
 }
 
-void S_Collision::HandleEvent(const EntityId& l_entity, const EntityEvent& l_event) {}
+void S_Collision::HandleEvent(const EntityId& l_entity, const EntityEvent& l_event) {
+	EntityManager* entities = m_systemManager->GetEntityManager();
+	C_Position* pos = entities->GetComponent<C_Position>(l_entity, Component::Position);
+	//std::cout << "Position: " << pos->GetPosition().first << " : " << pos->GetPosition().second << std::endl;
+}
 void S_Collision::Notify(const Message& l_message) {}

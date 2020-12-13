@@ -1,5 +1,6 @@
 #include "S_Control.h"
 #include "System_Manager.h"
+#include <C_Position.h>
 
 S_Control::S_Control(SystemManager* l_systemMgr)
 	: S_Base(System::Control, l_systemMgr)

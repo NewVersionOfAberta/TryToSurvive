@@ -7,6 +7,7 @@ Map::Map(SharedContext* l_context)
 {
 	m_context->m_gameMap = this;
 	LoadTiles("media/tile_cfg.txt");
+	LoadBackground();
 }
 
 Map::~Map() {
@@ -55,10 +56,10 @@ void Map::LoadMap(const std::string& l_path) {
 				std::cout << "! Bad layer: " << curLayer << std::endl;
 				continue;
 			}
-			for (int i = 0; i < m_maxMapSize.first; i++) {
+			for (int j = 0; j < m_maxMapSize.first; j++) {
 				std::getline(mapFile, line);
 				std::stringstream tilestream(line);
-				for (int j = 0; j < m_maxMapSize.second; j++) {
+				for (int i = 0; i < m_maxMapSize.second; i++) {
 					tilestream >> tileId;
 					--tileId;
 					if (tileId < 0) { continue; }
@@ -136,6 +137,23 @@ void Map::LoadTiles(const std::string& l_path) {
 	tileSetFile.close();
 }
 
+void Map::LoadBackground()
+{
+	if (!m_context->m_textureManager->RequireResource("Background")) 
+	{ 
+		std::cout << "Failed to loat background";
+		return; 
+	}
+	m_background = m_context->m_textureManager->GetResource("Background");
+}
+
+void Map::DrawBackground(sf::FloatRect viewSpace)
+{
+	m_context->m_wind->Draw(viewSpace.left, viewSpace.top,
+		viewSpace.width, viewSpace.height,
+		0, 0, m_background);
+}
+
 
 void Map::Update(float l_dT) {}
 
@@ -146,7 +164,6 @@ void Map::Draw(unsigned int l_layer) {
 	sf::Vector2i tileBegin(floor(viewSpace.left / Sheet::Tile_Size), floor(viewSpace.top / Sheet::Tile_Size));
 	sf::Vector2i tileEnd(ceil((viewSpace.left + viewSpace.width) / Sheet::Tile_Size),
 		ceil((viewSpace.top + viewSpace.height) / Sheet::Tile_Size));
-	m_context->m_wind->SetDelta(sf::Vector2f(tileBegin.first * Sheet::Tile_Size - viewSpace.left, tileBegin.second * Sheet::Tile_Size - viewSpace.top));
 
 	unsigned int count = 0;
 	for (int x = tileBegin.first - 1; x <= tileEnd.first + 1; ++x) {

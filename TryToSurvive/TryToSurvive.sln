@@ -7,9 +7,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TryToSurvive", "TryToSurviv
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TryToSurviveShared", "..\TryToSurviveShared\TryToSurviveShared.vcxitems", "{E2D5E87F-1FBD-49EA-ABAD-0E076D890F1F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerTryToSurvive", "..\ServerTryToSurvive\ServerTryToSurvive.vcxproj", "{CBB24BC7-8B74-4309-839C-17A112B8AF2E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\TryToSurviveShared\TryToSurviveShared.vcxitems*{44525c7d-ce36-4525-8c2f-bfee3c9d9637}*SharedItemsImports = 4
+		..\TryToSurviveShared\TryToSurviveShared.vcxitems*{cbb24bc7-8b74-4309-839c-17a112b8af2e}*SharedItemsImports = 4
 		..\TryToSurviveShared\TryToSurviveShared.vcxitems*{e2d5e87f-1fbd-49ea-abad-0e076d890f1f}*SharedItemsImports = 9
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +30,14 @@ Global
 		{44525C7D-CE36-4525-8C2F-BFEE3C9D9637}.Release|x64.Build.0 = Release|x64
 		{44525C7D-CE36-4525-8C2F-BFEE3C9D9637}.Release|x86.ActiveCfg = Release|Win32
 		{44525C7D-CE36-4525-8C2F-BFEE3C9D9637}.Release|x86.Build.0 = Release|Win32
+		{CBB24BC7-8B74-4309-839C-17A112B8AF2E}.Debug|x64.ActiveCfg = Debug|x64
+		{CBB24BC7-8B74-4309-839C-17A112B8AF2E}.Debug|x64.Build.0 = Debug|x64
+		{CBB24BC7-8B74-4309-839C-17A112B8AF2E}.Debug|x86.ActiveCfg = Debug|Win32
+		{CBB24BC7-8B74-4309-839C-17A112B8AF2E}.Debug|x86.Build.0 = Debug|Win32
+		{CBB24BC7-8B74-4309-839C-17A112B8AF2E}.Release|x64.ActiveCfg = Release|x64
+		{CBB24BC7-8B74-4309-839C-17A112B8AF2E}.Release|x64.Build.0 = Release|x64
+		{CBB24BC7-8B74-4309-839C-17A112B8AF2E}.Release|x86.ActiveCfg = Release|Win32
+		{CBB24BC7-8B74-4309-839C-17A112B8AF2E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

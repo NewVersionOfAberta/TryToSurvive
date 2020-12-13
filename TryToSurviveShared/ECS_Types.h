@@ -4,7 +4,7 @@ using ComponentType = unsigned int;
 
 enum class Component {
 	Position = 0, SpriteSheet, State, Movable, Controller, Collidable, SoundEmitter, SoundListener,
-	Client, Health, Name, UI_Element, Attacker, Shape 
+	Client, Health, Name, UI_Element, Attacker, Shape	 
 };
 
 enum class System {	

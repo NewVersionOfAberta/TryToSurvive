@@ -23,6 +23,15 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)S_State.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)S_Control.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)C_Collidable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Packet.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UDPSocket.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Client.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)NetworkDefinitions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)EntitySnapshot.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_TimedComponentBase.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PacketTypes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Clock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Lock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)S_Base.cpp" />
@@ -30,5 +39,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)System_Manager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)S_State.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)S_Control.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Packet.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UDPSocket.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)EntitySnapshot.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PacketTypes.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Clock.cpp" />
   </ItemGroup>
 </Project>

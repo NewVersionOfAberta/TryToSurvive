@@ -4,6 +4,8 @@
 #include "EventManager.h"
 #include "Usings.h"
 #include "Map.h"
+#include "Client.h"
+#include "BaseState.h"
 
 class State_Game : public BaseState {
 public:
@@ -23,7 +25,7 @@ public:
 	void PlayerMove(EventDetails* l_details);
 	void PlayerAttack(EventDetails* l_details);
 
-	//void HandlePacket(const PacketID& l_id, sf::Packet& l_packet, Client* l_client);
+	void HandlePacket(const PacketID& l_id, Packet& l_packet, Client* l_client);
 
 	// Debug:
 	//void ToggleOverlay(EventDetails* l_details);
@@ -32,6 +34,6 @@ private:
 	Map* m_gameMap;
 	int m_player;
 	//int m_bullets;
-	//Client* m_client;
+	Client* m_client;
 };
 

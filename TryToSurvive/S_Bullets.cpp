@@ -5,7 +5,7 @@
 #define BULLET_ELEVATION 1
 #define BULLET_WIDTH 20.0
 #define BULLET_HEIGHT 20.0
-#define SPEED 100
+#define SPEED 500
 
 S_Bullets::S_Bullets(SystemManager* l_systemMgr)
 	: S_Base(System::Bullets, l_systemMgr), m_currId(5), m_bullets(), m_playerId(0)
@@ -30,6 +30,7 @@ S_Bullets::~S_Bullets()
 
 void S_Bullets::Update(float l_dT)
 {
+	l_dT /= 1000;
 	EntityManager* eMgr = m_systemManager->GetEntityManager();
 	C_Position* position;
 	for (auto& bullet : m_bullets) {

@@ -39,6 +39,7 @@ public:
 	template<class T>
 	T* GetComponent(const EntityId& l_entity, const Component& l_component)
 	{
+		//std::cout << "Entity id: "<< l_entity << std::endl;
 		auto itr = m_entities.find(l_entity);
 		if (itr == m_entities.end()) { return nullptr; }
 		// Found the entity.

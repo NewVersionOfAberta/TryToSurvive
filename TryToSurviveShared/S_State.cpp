@@ -1,5 +1,6 @@
 #include "S_State.h"
 #include "System_Manager.h"
+#include "C_Position.h"
 
 S_State::S_State(SystemManager* l_systemMgr)
 	: S_Base(System::State, l_systemMgr)
@@ -30,6 +31,9 @@ void S_State::Update(float l_dT) {
 void S_State::HandleEvent(const EntityId& l_entity,
 	const EntityEvent& l_event)
 {
+	EntityManager* entities = m_systemManager->GetEntityManager();
+	C_Position* pos = entities->GetComponent<C_Position>(l_entity, Component::Position);
+	//std::cout << "Position: " << pos->GetPosition().first << " : " << pos->GetPosition().second << std::endl;
 	switch (l_event) {
 	case EntityEvent::Became_Idle:
 		ChangeState(l_entity, EntityState::Idle, false);
@@ -47,7 +51,7 @@ void S_State::Notify(const Message& l_message) {
 			GetComponent<C_State>(l_message.m_receiver, Component::State);
 
 		if (state->GetState() == EntityState::Dying || state->GetState() == EntityState::Attacking) { return; }
-		EntityEvent e;
+		EntityEvent e = EntityEvent::Became_Idle;
 		if (l_message.m_int == (int)Direction::Up) {
 			e = EntityEvent::Moving_Up;
 		}

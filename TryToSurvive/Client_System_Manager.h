@@ -11,7 +11,7 @@
 //#include "S_Sound.h"
 #include "S_SheetAnimation.h"
 //#include "S_Sound.h"
-//#include "S_Network.h"
+#include "S_Network.h"
 //#include "S_CharacterUI.h"
 //#include "FontManager.h"
 

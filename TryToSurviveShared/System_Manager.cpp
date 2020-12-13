@@ -1,6 +1,7 @@
 #include "System_Manager.h"
 #include "Entity_Manager.h"
 #include "EntityEvents.h"
+#include "Clock.h"
 
 SystemManager::SystemManager() { m_entityManager = nullptr; }
 SystemManager::~SystemManager() { PurgeSystems(); }
@@ -18,10 +19,15 @@ void SystemManager::AddEvent(const EntityId& l_entity, const EventID& l_event)
 }
 
 void SystemManager::Update(float l_dT) {
+	Clock clock;
+	//std::cout << "Start update" << clock.getCurrentTime() << std::endl;
 	for (auto& itr : m_systems) {
+		//std::cout << "Update system " << (int)itr.first << std::endl;
 		itr.second->Update(l_dT);
 	}
+	//std::cout << "End update, start handle" << clock.getCurrentTime() << std::endl;
 	HandleEvents();
+	//std::cout << "End handle" << clock.getCurrentTime() << std::endl;
 }
 
 void SystemManager::HandleEvents() {
@@ -30,6 +36,7 @@ void SystemManager::HandleEvents() {
 		while (event.second.ProcessEvents(id)) {
 			for (auto& system : m_systems) {
 				if (system.second->HasEntity(event.first)) {
+					//std::cout << "Entity: " << event.first << " has system " << (int)system.first << " and handle event " << id << std::endl;
 					system.second->HandleEvent(event.first, (EntityEvent)id);
 				}
 			}

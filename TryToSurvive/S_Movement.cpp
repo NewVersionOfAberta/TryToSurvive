@@ -1,6 +1,7 @@
 #include "S_Movement.h"
 #include "System_Manager.h"
 #include "Map.h"
+#include "Clock.h"
 
 S_Movement::S_Movement(SystemManager* l_systemMgr)
 	: S_Base(System::Movement, l_systemMgr)
@@ -19,22 +20,32 @@ S_Movement::S_Movement(SystemManager* l_systemMgr)
 S_Movement::~S_Movement() {}
 
 void S_Movement::Update(float l_dT) {
+	
 	if (!m_gameMap) { return; }
+	//l_dT = Clock::millsAsSeconds(l_dT);
+	l_dT /= 1000;
 	EntityManager* entities = m_systemManager->GetEntityManager();
 	for (auto& entity : m_entities) {
+		//std::cout << "Entity id: " << entity << std::endl;
 		C_Position* position = entities->GetComponent<C_Position>(entity, Component::Position);
 		C_Movable* movable = entities->GetComponent<C_Movable>(entity, Component::Movable);
-		MovementStep(l_dT, movable, position);
+		//temp
 		sf::Vector2f velocity = movable->GetVelocity();
-		velocity.first *= l_dT;
-		velocity.second *= l_dT;
-		position->MoveBy(velocity);
+		//std::cout << "Velocity before step: " << velocity.first << " : " << velocity.second << std::endl;
+		MovementStep(l_dT, movable, position);
+		velocity = movable->GetVelocity();
+		//std::cout << "Velocity after step: " << velocity.first << " : " << velocity.second << std::endl;
+	/*	velocity.first *= l_dT;
+		velocity.second *= l_dT;*/
+		position->MoveBy(velocity.first * l_dT, velocity.second * l_dT);
+		//std::cout << "Position: " << position->GetPosition().first << " : " << position->GetPosition().second << std::endl;
 	}
 }
 
 void S_Movement::HandleEvent(const EntityId& l_entity,
 	const EntityEvent& l_event)
 {
+
 	switch (l_event) {
 	case EntityEvent::Colliding_X: StopEntity(l_entity, Axis::x); break;
 	case EntityEvent::Colliding_Y: StopEntity(l_entity, Axis::y); break;
@@ -88,15 +99,15 @@ void S_Movement::MovementStep(float l_dT, C_Movable* l_movable, C_Position* l_po
 	float f_coefficient = GetTileFriction(l_position->GetElevation(),
 		floor(l_position->GetPosition().first / Sheet::Tile_Size),
 		floor(l_position->GetPosition().second / Sheet::Tile_Size));
-
+	//l_dT /= 1000;
 	sf::Vector2f friction(l_movable->GetSpeed().first * f_coefficient * l_dT,
 		l_movable->GetSpeed().second * f_coefficient * l_dT);
 	/*friction.first *= l_dT;
 	friction.second *= l_dT;*/
 	sf::Vector2f acceleration = l_movable->GetAcceleration();
-	acceleration.first *= l_dT;
-	acceleration.second *= l_dT;
-	l_movable->AddVelocity(acceleration);
+	/*acceleration.first *= l_dT;
+	acceleration.second *= l_dT;*/
+	l_movable->AddVelocity(sf::Vector2f(acceleration.first* l_dT, acceleration.second * l_dT));
 	l_movable->SetAcceleration(sf::Vector2f(0.0f, 0.0f));
 	l_movable->ApplyFriction(friction);
 
@@ -109,6 +120,8 @@ void S_Movement::MovementStep(float l_dT, C_Movable* l_movable, C_Position* l_po
 	l_movable->SetVelocity(sf::Vector2f(
 		(l_movable->GetVelocity().first / magnitude) * max_V,
 		(l_movable->GetVelocity().second / magnitude) * max_V));
+	//std::cout << "Velocity set old: " << l_movable->GetVelocity().first << " : " << l_movable->GetVelocity().second << std::endl;
+
 }
 
 void S_Movement::SetMap(Map* l_gameMap) { m_gameMap = l_gameMap; }

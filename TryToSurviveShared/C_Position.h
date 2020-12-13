@@ -20,12 +20,15 @@ public:
 	unsigned int GetElevation() { return m_elevation; }
 
 	void SetPosition(float l_x, float l_y) {
+		//std::cout << "Position new: " << l_x << " " << l_y << std::endl;
+		//std::cout << "Position old: " << l_x << " " << l_y << std::endl;
 		m_positionOld = m_position;
 		m_position = sf::Vector2f(l_x, l_y);
 	}
 
 	void SetPosition(const sf::Vector2f& l_vec) {
-		std::cout << "Position: " << l_vec.first / 32.0 << " " << l_vec.second / 32 << std::endl;
+		//std::cout << "Position new: " << l_vec.first << " " << l_vec.second << std::endl;
+		//std::cout << "Position old: " << m_position.first << " " << m_position.second << std::endl;
 		m_positionOld = m_position;
 		m_position = l_vec;
 	}
@@ -35,12 +38,14 @@ public:
 	}
 
 	void MoveBy(float l_x, float l_y) {
+		//std::cout << "Moved by: " << l_x << " : " << l_y << std::endl;
 		m_positionOld = m_position;
 		m_position.first += l_x;
 		m_position.second += l_y;
 	}
 
 	void MoveBy(const sf::Vector2f& l_vec) {
+		//std::cout << "Moved by: " << l_vec.first << " : " << l_vec.second << std::endl;
 		m_positionOld = m_position;
 		m_position.first += l_vec.first;
 		m_position.second += l_vec.second;

@@ -31,7 +31,7 @@ namespace sf {
 			return (isLeftInX && isTopInY) || (isRightInX && isTopInY) || (isLeftInX && isBottomInY) || (isRightInX && isBottomInY);
 		}
 
-		bool intersects(const FloatRect& rectangle, FloatRect& intersection) {
+		bool intersects(const FloatRect& rectangle, FloatRect& intersection) const {
 			float r1MinX = min(left, left + width);
 			float r1MaxX = max(left, left + width);
 			float r1MinY = min(top, (top + height));

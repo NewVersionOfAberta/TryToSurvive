@@ -1,6 +1,7 @@
 #include "S_SheetAnimation.h"
 #include "System_Manager.h"
 #include "C_SpriteSheet.h"
+#include <C_Position.h>
 
 S_SheetAnimation::S_SheetAnimation(SystemManager* l_systemMgr)
 	: S_Base(System::SheetAnimation, l_systemMgr)
@@ -16,6 +17,7 @@ S_SheetAnimation::S_SheetAnimation(SystemManager* l_systemMgr)
 S_SheetAnimation::~S_SheetAnimation() {}
 
 void S_SheetAnimation::Update(float l_dT) {
+	l_dT /= 1000;
 	EntityManager* entities = m_systemManager->GetEntityManager();
 	for (auto& entity : m_entities) {
 		C_SpriteSheet* sheet = entities->GetComponent<C_SpriteSheet>(entity, Component::SpriteSheet);

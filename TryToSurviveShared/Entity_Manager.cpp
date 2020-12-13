@@ -14,7 +14,10 @@ int EntityManager::AddEntity(const Bitmask& l_mask, int l_id) {
 	if (!m_entities.emplace(entity, EntityData()).second) { return -1; }
 	if (l_id == -1) { ++m_idCounter; }
 	for (int i = 0; i < N_COMPONENT_TYPES; ++i) {
-		if (l_mask.GetBit(i)) { AddComponent(entity, (Component)i); }
+		if (l_mask.GetBit(i)) {
+			std::cout << "Add component " << i << " Entity: " << l_id << std::endl;
+			AddComponent(entity, (Component)i); 
+		}
 	}
 
 	// Notifying the system manager of a modified entity.

@@ -10,12 +10,12 @@ ClientEntityManager::ClientEntityManager(SystemManager* l_sysMgr,
 	AddComponentType<C_Collidable>(Component::Collidable);
 	AddComponentType<C_SpriteSheet>(Component::SpriteSheet);
 	AddComponentType<C_Shape>(Component::Shape);
-	/*AddComponentType<C_SoundEmitter>(Component::SoundEmitter);
-	AddComponentType<C_SoundListener>(Component::SoundListener);
+	//AddComponentType<C_SoundEmitter>(Component::SoundEmitter);
+	//AddComponentType<C_SoundListener>(Component::SoundListener);
 	AddComponentType<C_Client>(Component::Client);
-	AddComponentType<C_Health>(Component::Health);
-	AddComponentType<C_Name>(Component::Name);
-	AddComponentType<C_UI_Element>(Component::UI_Element);*/
+	//AddComponentType<C_Health>(Component::Health);
+	//AddComponentType<C_Name>(Component::Name);
+	//AddComponentType<C_UI_Element>(Component::UI_Element);*/
 }
 
 ClientEntityManager::~ClientEntityManager() {}
@@ -24,6 +24,7 @@ int ClientEntityManager::AddEntity(const std::string& l_entityFile, int l_id) {
 	int EntityId = -1;
 
 	std::ifstream file;
+	std::cout << "Adding entity: " << l_id << " entity file: " << l_entityFile << std::endl;
 	file.open(Utils::GetWorkingDirectory() + "media/Entities/" + l_entityFile + ".entity");
 	
 	if (!file.is_open()) {
@@ -52,6 +53,7 @@ int ClientEntityManager::AddEntity(const std::string& l_entityFile, int l_id) {
 			if (EntityId == -1) { continue; }
 			unsigned int c_id = 0;
 			keystream >> c_id;
+			//std::cout << "Add component: " << c_id << std::endl;
 			C_Base* component = GetComponent<C_Base>(EntityId, (Component)c_id);
 			if (!component) { continue; }
 			keystream >> *component;
@@ -62,5 +64,6 @@ int ClientEntityManager::AddEntity(const std::string& l_entityFile, int l_id) {
 		}
 	}
 	file.close();
+	std::cout << "Entity id: " << EntityId << std::endl;
 	return EntityId;
 }

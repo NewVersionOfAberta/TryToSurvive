@@ -8,8 +8,9 @@ m_systemManager(&m_textureManager), m_context(), m_textureManager()
 	m_clock.restart();
 	srand(time(nullptr));
 	m_systemManager.SetEntityManager(&m_entityManager);
+	
 
-	//m_client.SetServerInformation("localhost", (PortNumber)Network::ServerPort);
+	m_client.SetServerInformation("127.0.0.1", (PortNumber)Network::ServerPort);
 	m_context.m_wind = &m_window;
 	m_context.m_eventManager = m_window.GetEventManager();
 	m_context.m_systemManager = &m_systemManager;
@@ -20,13 +21,11 @@ m_systemManager(&m_textureManager), m_context(), m_textureManager()
 	m_context.m_audioManager = &m_audioManager;
 	m_context.m_soundManager = &m_soundManager;
 	
-	m_context.m_guiManager = &m_guiManager;
-	m_context.m_client = &m_client;*/
+	m_context.m_guiManager = &m_guiManager;*/
+	m_context.m_client = &m_client;
 	//m_systemManager.GetSystem<S_Sound>(System::Sound)->SetUp(&m_audioManager, &m_soundManager);
 
-	// Debug:
-	/*m_systemManager.m_debugOverlay = &m_debugOverlay;
-	m_fontManager.RequireResource("Main");*/
+	//m_fontManager.RequireResource("Main");*/
 	m_stateManager.SwitchTo(StateType::Game);
 }
 
@@ -41,6 +40,7 @@ Window* Game::GetWindow() { return &m_window; }
 void Game::Update() {
 	m_window.Update();
 	m_stateManager.Update(m_elapsed);
+	m_client.Update(m_elapsed);
 
 	/*GUI_Event guiEvent;
 	while (m_guiManager.PollEvent(guiEvent)) {
