@@ -49,8 +49,8 @@ bool Server::Send(UINT32& l_ip, const PortNumber& l_port, Packet& l_packet){
 
 void Server::Broadcast(Packet& l_packet, const ClientID& l_ignore){
 	//ttsv::Lock lock(&m_mutex);
-	std::cout << "Server lock" << std::endl;
-	m_mutex.lock();
+	//std::cout << "Server lock" << std::endl;
+	//m_mutex.lock();
 	for (auto &client : m_clients){
 		if (client.first == l_ignore){ continue; }
 		if (m_outgoing.send(l_packet, client.second.m_clientIP, client.second.m_clientPORT)
@@ -62,7 +62,7 @@ void Server::Broadcast(Packet& l_packet, const ClientID& l_ignore){
 		}
 		m_totalSent += l_packet.getDataSize();
 	}
-	m_mutex.unlock();
+	//m_mutex.unlock();
 	//LEAVE
 }
 
@@ -101,7 +101,7 @@ void Server::Listen(){
 
 		if (type == PacketType::Heartbeat){
 			bool ClientFound = false;
-			std::cout << "Server lock" << std::endl;
+			//std::cout << "Server lock" << std::endl;
 			m_mutex.lock();
 			for (auto &client : m_clients){
 				auto& info = client.second;
@@ -218,7 +218,7 @@ bool Server::HasClient(const UINT32& l_ip, const PortNumber& l_port){
 
 bool Server::GetClientInfo(const ClientID& l_id, ClientInfo& l_info){
 	//ttsv::Lock lock(&m_mutex);
-	std::cout << "Server lock" << std::endl;
+	//std::cout << "Server lock" << std::endl;
 	m_mutex.lock();
 	for (auto itr = m_clients.begin(); itr != m_clients.end(); ++itr){
 		if (itr->first == l_id){
@@ -235,7 +235,7 @@ bool Server::GetClientInfo(const ClientID& l_id, ClientInfo& l_info){
 
 bool Server::RemoveClient(const ClientID& l_id){
 //	ttsv::Lock lock(&m_mutex);
-	std::cout << "Server lock" << std::endl;
+	//std::cout << "Server lock" << std::endl;
 	m_mutex.lock();
 	auto itr = m_clients.find(l_id);
 	if (itr == m_clients.end()){
@@ -254,7 +254,7 @@ bool Server::RemoveClient(const ClientID& l_id){
 
 bool Server::RemoveClient(const UINT32& l_ip, const PortNumber& l_port){
 	//ttsv::Lock lock(&m_mutex);
-	std::cout << "Server lock" << std::endl;
+	//std::cout << "Server lock" << std::endl;
 	m_mutex.lock();
 	for (auto itr = m_clients.begin(); itr != m_clients.end(); ++itr)
 	{
@@ -278,8 +278,8 @@ void Server::DisconnectAll(){
 	if (!m_running){ return; }
 	Packet p;
 	StampPacket(PacketType::Disconnect, p);
-	Broadcast(p);
 	m_mutex.lock();
+	Broadcast(p);
 	m_clients.clear();
 	m_mutex.unlock();
 }

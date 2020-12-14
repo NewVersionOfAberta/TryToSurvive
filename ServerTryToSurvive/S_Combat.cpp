@@ -24,17 +24,17 @@ void S_Combat::Update(float l_dT){
 	for (auto &entity : m_entities){
 		C_Attacker* attack = entities->GetComponent<C_Attacker>(entity, Component::Attacker);
 		if (!attack){ continue; }
-		sf::Vector2f offset = attack->GetOffset();
-		sf::FloatRect AoA = attack->GetAreaOfAttack();
-		Direction dir = entities->GetComponent<C_Movable>(entity, Component::Movable)->GetDirection();
+		//sf::Vector2f offset = attack->GetOffset();
+		//sf::FloatRect AoA = attack->GetAreaOfAttack();
+		//Direction dir = entities->GetComponent<C_Movable>(entity, Component::Movable)->GetDirection();
 		sf::Vector2f position = entities->GetComponent<C_Position>(entity, Component::Position)->GetPosition();
-		if (dir == Direction::Left){ offset.first -= AoA.width / 2; }
+		/*if (dir == Direction::Left){ offset.first -= AoA.width / 2; }
 		else if (dir == Direction::Right){ offset.first += AoA.width / 2; }
 		else if (dir == Direction::Up){ offset.second -= AoA.height / 2; }
-		else if (dir == Direction::Down){ offset.second += AoA.height / 2; }
-		position.first -= AoA.width / 2;
-		position.second -= AoA.height / 2;
-		attack->SetAreaPosition(sf::Vector2f(position.first + offset.first, position.second + offset.second));
+		else if (dir == Direction::Down){ offset.second += AoA.height / 2; }*/
+	/*	position.first -= AoA.width / 2;
+		position.second -= AoA.height / 2;*/
+		attack->SetAreaPosition(sf::Vector2f(position.first, position.second));
 		//std::cout << "Position: " << position.first << position.second << std::endl;
 	}
 }

@@ -28,7 +28,7 @@ void S_Collision::Update(float l_dT){
 
 		collidable->SetPosition(position->GetPosition());
 		collidable->ResetCollisionFlags();
-		CheckOutOfBounds(position, collidable);
+		CheckOutOfBounds(position, collidable, entity);
 		MapCollisions(entity, position, collidable);
 		//std::cout << "Position: " << position->GetPosition().first << position->GetPosition().second << std::endl;
 	}
@@ -41,18 +41,18 @@ void S_Collision::EntityCollisions(){
 	for (auto itr = m_entities.begin(); itr != m_entities.end(); ++itr)
 	{
 		for (auto itr2 = std::next(itr); itr2 != m_entities.end(); ++itr2){
-			C_Collidable* collidable1 = entities->GetComponent<C_Collidable>(*itr, Component::Collidable);
-			C_Collidable* collidable2 = entities->GetComponent<C_Collidable>(*itr2, Component::Collidable);
 			
-			if ( collidable1->GetCollidable().intersects(collidable2->GetCollidable(), Intersection))
-			{
-				// Entity-on-entity collision!
-			}
+		
 			C_Attacker* attacker1 = entities->GetComponent<C_Attacker>(*itr, Component::Attacker);
 			C_Attacker* attacker2 = entities->GetComponent<C_Attacker>(*itr2, Component::Attacker);
-			if (!attacker1 && !attacker2){ continue; }
+			if (attacker1 && attacker2){ 
+				m_systemManager->AddEvent(*itr, (EventID)EntityEvent::Colliding_X);
+				m_systemManager->AddEvent(*itr2, (EventID)EntityEvent::Colliding_X);
+				continue;
+			}
 			Message msg((MessageType)EntityMessage::Being_Attacked);
-			if (attacker1){
+			if (attacker1 && !attacker2){
+				C_Collidable* collidable2 = entities->GetComponent<C_Collidable>(*itr2, Component::Collidable);
 				if (attacker1->GetAreaOfAttack().intersects(collidable2->GetCollidable(), Intersection)){
 					// Attacker-on-entity collision!
 					msg.m_receiver = *itr2;
@@ -60,7 +60,8 @@ void S_Collision::EntityCollisions(){
 					m_systemManager->GetMessageHandler()->Dispatch(msg);
 				}
 			}
-			if (attacker2){
+			if (attacker2 && !attacker1){
+				C_Collidable* collidable1 = entities->GetComponent<C_Collidable>(*itr, Component::Collidable);
 				if (attacker2->GetAreaOfAttack().intersects(collidable1->GetCollidable(), Intersection)){
 					// Attacker-on-entity collision!
 					msg.m_receiver = *itr;
@@ -72,23 +73,27 @@ void S_Collision::EntityCollisions(){
 	}
 }
 
-void S_Collision::CheckOutOfBounds(C_Position* l_pos, C_Collidable* l_col){
+void S_Collision::CheckOutOfBounds(C_Position* l_pos, C_Collidable* l_col, int l_entity){
 	unsigned int TileSize = m_gameMap->GetTileSize();
 
 	if (l_pos->GetPosition().first < 0){
 		l_pos->SetPosition(0.0f, l_pos->GetPosition().second);
 		l_col->SetPosition(l_pos->GetPosition());
+		m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_X);
 	} else if (l_pos->GetPosition().first > m_gameMap->GetMapSize().first * TileSize){
 		l_pos->SetPosition(m_gameMap->GetMapSize().first * TileSize, l_pos->GetPosition().second);
 		l_col->SetPosition(l_pos->GetPosition());
+		m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_X);
 	}
 
 	if (l_pos->GetPosition().second < 0){
 		l_pos->SetPosition(l_pos->GetPosition().first, 0.0f);
 		l_col->SetPosition(l_pos->GetPosition());
+		m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_Y);
 	} else if (l_pos->GetPosition().second > m_gameMap->GetMapSize().second * TileSize){
 		l_pos->SetPosition(l_pos->GetPosition().first, m_gameMap->GetMapSize().second * TileSize);
 		l_col->SetPosition(l_pos->GetPosition());
+		m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_Y);
 	}
 }
 
@@ -133,7 +138,6 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 		float xDiff = (EntityAABB.left + (EntityAABB.width / 2)) - (col.m_tileBounds.left + (col.m_tileBounds.width / 2));
 		float yDiff = (EntityAABB.top + (EntityAABB.height / 2)) - (col.m_tileBounds.top + (col.m_tileBounds.height / 2));
 		float resolve = 0;
-		std::cout << "Collison Detected";
 		if (std::abs(xDiff) > std::abs(yDiff)) {
 			if (xDiff > 0) {
 				resolve = (col.m_tileBounds.left + TileSize) - EntityAABB.left;
@@ -143,6 +147,8 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 			}
 			l_pos->MoveBy(resolve, 0);
 			l_col->SetPosition(l_pos->GetPosition());
+
+			std::cout << "Collison Detected on x" << std::endl;
 			m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_X);
 			l_col->CollideOnX();
 		}
@@ -155,6 +161,7 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 			}
 			l_pos->MoveBy(0, resolve);
 			l_col->SetPosition(l_pos->GetPosition());
+			std::cout << "Collison Detected on y" << std::endl;
 			m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_Y);
 			l_col->CollideOnY();
 		}

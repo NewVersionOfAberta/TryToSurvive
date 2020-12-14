@@ -7,7 +7,7 @@
 #include <fstream>
 #include "Utils.h"
 
-using EntityId = int;
+using EntityId = INT32;
 using ComponentContainer = std::vector<C_Base*>;
 
 struct EntityData {

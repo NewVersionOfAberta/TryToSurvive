@@ -1,3 +1,3 @@
 #pragma once
 // SERVER
-#define SNAPSHOT_INTERVAL 100
+#define SNAPSHOT_INTERVAL 50

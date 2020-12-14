@@ -64,6 +64,6 @@ int ClientEntityManager::AddEntity(const std::string& l_entityFile, int l_id) {
 		}
 	}
 	file.close();
-	std::cout << "Entity id: " << EntityId << std::endl;
+	//std::cout << "Entity id: " << EntityId << std::endl;
 	return EntityId;
 }

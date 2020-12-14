@@ -12,8 +12,8 @@ ClientSystemManager::ClientSystemManager(TextureManager* l_textureMgr/*, FontMan
 	AddSystem<S_SheetAnimation>(System::SheetAnimation);
 	AddSystem<S_Network>(System::Network);
 	//AddSystem<S_Sound>(System::Sound);
-	AddSystem<S_Renderer>(System::Renderer);
 	//AddSystem<S_CharacterUI>(System::Character_UI);
+	AddSystem<S_Renderer>(System::Renderer);
 }
 ClientSystemManager::~ClientSystemManager() {}
 

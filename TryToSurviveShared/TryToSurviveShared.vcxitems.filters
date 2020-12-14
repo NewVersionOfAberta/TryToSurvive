@@ -32,7 +32,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)PacketTypes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Clock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Lock.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)S_Bullets.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)S_Base.cpp" />
@@ -45,6 +44,5 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)EntitySnapshot.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)PacketTypes.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Clock.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)S_Bullets.cpp" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@
 
 
 namespace sf {
-	using Time = INT64;
+	using Time = double;
 	using Vector2i = std::pair<INT32, INT32>; // where first = x, second = y
 	using Vector2f = std::pair<float, float>; // where first = x, second = y
 	using Vector2u = std::pair<UINT32, UINT32>; // where first = x, second = y

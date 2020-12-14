@@ -20,7 +20,6 @@ S_Renderer::S_Renderer(SystemManager* l_systemMgr)
 S_Renderer::~S_Renderer() {}
 
 void S_Renderer::Update(float l_dT) {
-	l_dT /= 1000;
 	EntityManager* entities = m_systemManager->GetEntityManager();
 	for (auto& entity : m_entities)
 	{

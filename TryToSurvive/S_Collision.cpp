@@ -31,14 +31,14 @@ void S_Collision::Update(float l_dT) {
 		MapCollisions(entity, position, collidable);
 		//std::cout << "Position: " << position->GetPosition().first << position->GetPosition().second << std::endl;
 	}
-	//EntityCollisions();
+	EntityCollisions();
 }
 
 void S_Collision::EntityCollisions() {
 	//EntityManager* entities = m_systemManager->GetEntityManager();
 	//for (auto itr = m_entities.begin(); itr != m_entities.end(); ++itr)
 	//{
-	//	for (auto itr2 = std::n.firstt(itr); itr2 != m_entities.end(); ++itr2) {
+	//	for (auto itr2 = std::n.first(itr); itr2 != m_entities.end(); ++itr2) {
 	//		C_Collidable* collidable1 = entities->GetComponent<C_Collidable>(*itr, Component::Collidable);
 	//		C_Collidable* collidable2 = entities->GetComponent<C_Collidable>(*itr2, Component::Collidable);
 	//		if (collidable1->GetCollidable().intersects(collidable2->GetCollidable()))

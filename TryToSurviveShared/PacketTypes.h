@@ -7,7 +7,7 @@
 #include <Packet.h>
 using PacketID = INT32;
 enum class PacketType{
-	Disconnect = -1, Connect, Heartbeat, Snapshot, PlayerUpdate, Message, Hurt, OutOfBounds, BulletSpawn
+	Disconnect = -1, Connect, Heartbeat, Snapshot, PlayerUpdate, Message, Hurt, BulletSpawn, OutOfBounds
 };
 
 void StampPacket(const PacketType& l_type, Packet& l_packet);

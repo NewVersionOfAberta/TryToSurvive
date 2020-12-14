@@ -37,6 +37,7 @@ public:
 	EntityId GetEntityID(const ClientID& l_client);
 
 	void CreateSnapshot(Packet& l_packet);
+	void AddBullet(Packet& l_packet, const ClientID& l_cid);
 	void UpdatePlayer(Packet& l_packet, const ClientID& l_cid);
 private:
 	PlayerInputContainer m_playerInput;

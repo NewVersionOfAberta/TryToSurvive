@@ -29,7 +29,7 @@ public:
 private:
 	void EntityCollisions();
 	void MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_Collidable* l_col);
-	void CheckOutOfBounds(C_Position* l_pos, C_Collidable* l_col);
+	void CheckOutOfBounds(C_Position* l_pos, C_Collidable* l_col, int l_entity);
 	
 	Map* m_gameMap;
 };

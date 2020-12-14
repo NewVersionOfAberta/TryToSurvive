@@ -9,6 +9,7 @@
 #include "EntitySnapshot.h"
 #include "S_Network.h"
 #include "Lock.h"
+#include <random>
 
 #define TO_SECONDS 1000000.0
 
@@ -72,7 +73,10 @@ void State_Game::OnDestroy() {
 }
 
 void State_Game::Update(const sf::Time& l_time) {
-	if (!m_client->IsConnected()) { m_stateMgr->Remove(StateType::Game); m_stateMgr->SwitchTo(StateType::MainMenu); return; }
+	if (!m_client->IsConnected()) { 
+		//m_stateMgr->Remove(StateType::Game); m_stateMgr->SwitchTo(StateType::MainMenu); 
+		return; 
+	}
 	SharedContext* context = m_stateMgr->GetContext();
 	UpdateCamera();
 
@@ -81,7 +85,7 @@ void State_Game::Update(const sf::Time& l_time) {
 		Clock clock;
 		m_client->Lock();
 		//std::cout << "Game Update. Take lock at: " << clock.getCurrentTime() << std::endl;
-		context->m_systemManager->Update(l_time);
+		context->m_systemManager->Update(Clock::millsAsSeconds(l_time));
 		m_client->Unlock();
 		//std::cout << "Game Update. Leave at: " << clock.getCurrentTime() << std::endl;
 		//LEAVE
@@ -175,10 +179,10 @@ void State_Game::PlayerMove(EventDetails* l_details) {
 void State_Game::PlayerAttack(EventDetails* l_details)
 {
 	Message msg((MessageType)EntityMessage::Attack);
-
 	msg.m_2f.m_x = l_details->m_mouse.first;
 	msg.m_2f.m_y = l_details->m_mouse.second;
-	//msg.m_receiver = m_bullets;
+	msg.m_receiver = m_player;
+	msg.m_sender = rand();
 
 	m_stateMgr->GetContext()->m_systemManager->
 		GetMessageHandler()->Dispatch(msg);
@@ -205,7 +209,7 @@ void State_Game::HandlePacket(const PacketID& l_id, Packet& l_packet, Client* l_
 		//LEAVE
 		m_player = eid;
 		m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Network>(System::Network)->SetPlayerID(m_player);
-		m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Bullets>(System::Bullets)->SetPlayerID(m_player);
+		//m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Bullets>(System::Bullets)->SetPlayerID(m_player);
 		//emgr->AddComponent(eid, Component::SoundListener);
 		return;
 	}
@@ -256,6 +260,24 @@ void State_Game::HandlePacket(const PacketID& l_id, Packet& l_packet, Client* l_
 		Message msg((MessageType)EntityMessage::Hurt);
 		msg.m_receiver = id;
 		m_stateMgr->GetContext()->m_systemManager->GetMessageHandler()->Dispatch(msg);
+		break;
+	}
+	case PacketType::BulletSpawn:
+	{
+		
+		EntityId id, bulletId;
+		sf::Vector2f pos, speed;
+		Message msg((MessageType)EntityMessage::Bullet_add);
+		if (!(l_packet >> id >> bulletId >> speed.first >> speed.second >> pos.first >> pos.second)) { return; }
+		if (m_player == id) { return; }
+		std::cout << " receiver: " << id << " sender: " << bulletId << " pos.first: " << pos.first << " pos.second: " << pos.second << std::endl;
+		S_Bullets* s = m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Bullets>(System::Bullets);
+		s->AddBullet(pos, speed, bulletId);
+		/*msg.m_receiver = id;
+		msg.m_sender = bulletId;
+		msg.m_2f.m_x = m_x;
+		msg.m_2f.m_y = m_y;
+		m_stateMgr->GetContext()->m_systemManager->GetMessageHandler()->Dispatch(msg);*/
 		break;
 	}
 	}

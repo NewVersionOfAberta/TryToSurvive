@@ -11,9 +11,16 @@ public:
 			>> m_knockback >> m_attackDuration;
 	}
 
+	void SetSize(const sf::Vector2f& l_size){
+		m_attackArea.width = l_size.first;
+		m_attackArea.height = l_size.second;
+
+	}
+
 	void SetAreaPosition(const sf::Vector2f& l_pos){
 		m_attackArea.left = l_pos.first;
 		m_attackArea.top = l_pos.second;
+		
 	}
 
 	const sf::FloatRect& GetAreaOfAttack(){ return m_attackArea; }

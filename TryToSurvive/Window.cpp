@@ -173,11 +173,13 @@ LRESULT Window::ProcessEvents(HWND hWnd, UINT message,
 	}
 	case WM_LBUTTONUP:
 	{
-		event.type = ttsv::Event::MouseButtonReleased;
+		/*event.type = ttsv::Event::MouseButtonReleased;
 		event.mouseButton.button = ttsv::Event::btnLeft;
 		event.mouseButton.x = static_cast<INT16>(LOWORD(lParam));
 		event.mouseButton.y = static_cast<INT16>(HIWORD(lParam));
-		PushEvent(event);
+		event.mouseButton.x = p.x + (m_view.getCenter().first - m_view.getSize().first / 2);
+		event.mouseButton.y = p.y + (m_view.getCenter().second - m_view.getSize().second / 2);
+		PushEvent(event);*/
 		break;
 	}
 	default:

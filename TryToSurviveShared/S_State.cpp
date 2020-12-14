@@ -71,13 +71,13 @@ void S_State::Notify(const Message& l_message) {
 	break;
 	case EntityMessage::Attack:
 	{
-		C_State* state = m_systemManager->GetEntityManager()->
+		/*C_State* state = m_systemManager->GetEntityManager()->
 			GetComponent<C_State>(l_message.m_receiver, Component::State);
 
 		if (state->GetState() != EntityState::Dying && state->GetState() != EntityState::Attacking) {
 			m_systemManager->AddEvent(l_message.m_receiver, (EventID)EntityEvent::Began_Attacking);
 			ChangeState(l_message.m_receiver, EntityState::Attacking, false);
-		}
+		}*/
 		break;
 	}
 	case EntityMessage::Hurt:

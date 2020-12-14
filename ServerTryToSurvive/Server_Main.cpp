@@ -13,7 +13,7 @@ int main(){
 	World world;
 	Clock clock;
 	clock.restart();
-
+	float time;
 	while (world.IsRunning()){
 		world.Update(clock.restart());
 	}

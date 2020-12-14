@@ -39,6 +39,7 @@ Window* Game::GetWindow() { return &m_window; }
 
 void Game::Update() {
 	m_window.Update();
+	//std::cout << "Time : " << m_elapsed << std::endl;
 	m_stateManager.Update(m_elapsed);
 	m_client.Update(m_elapsed);
 

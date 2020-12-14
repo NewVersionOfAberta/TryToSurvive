@@ -73,12 +73,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
         NULL);                    // creation parameters
 
     CreateConsole();
-    Game game(hWnd);
-    m_game = &game;
 
     ShowWindow(hWnd, iCmdShow);
     UpdateWindow(hWnd);
 
+    Game game(hWnd);
+    m_game = &game;
     bDone = FALSE;
 
     while (FALSE == bDone) {

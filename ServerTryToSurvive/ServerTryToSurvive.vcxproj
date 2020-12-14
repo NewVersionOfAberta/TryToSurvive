@@ -145,6 +145,7 @@
     <ClCompile Include="Server_Entity_Manager.cpp" />
     <ClCompile Include="Server_Main.cpp" />
     <ClCompile Include="Server_System_Manager.cpp" />
+    <ClCompile Include="S_Bullets.cpp" />
     <ClCompile Include="S_Collision.cpp" />
     <ClCompile Include="S_Combat.cpp" />
     <ClCompile Include="S_Movement.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Server.h" />
     <ClInclude Include="Server_Entity_Manager.h" />
     <ClInclude Include="Server_System_Manager.h" />
+    <ClInclude Include="S_Bullets.h" />
     <ClInclude Include="S_Collision.h" />
     <ClInclude Include="S_Combat.h" />
     <ClInclude Include="S_Movement.h" />

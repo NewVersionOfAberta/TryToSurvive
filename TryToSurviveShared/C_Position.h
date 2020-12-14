@@ -27,8 +27,8 @@ public:
 	}
 
 	void SetPosition(const sf::Vector2f& l_vec) {
-		//std::cout << "Position new: " << l_vec.first << " " << l_vec.second << std::endl;
-		//std::cout << "Position old: " << m_position.first << " " << m_position.second << std::endl;
+		/*std::cout << "Position new: " << l_vec.first << " " << l_vec.second << std::endl;
+		std::cout << "Position old: " << m_position.first << " " << m_position.second << std::endl;*/
 		m_positionOld = m_position;
 		m_position = l_vec;
 	}

@@ -21,12 +21,11 @@ World::~World(){ m_entities.SetSystemManager(nullptr); }
 
 void World::Update(const sf::Time& l_time){
 	if (!m_server.IsRunning()){ m_running = false; return; }
+	//std::cout << "Time : " << l_time << std::endl;
 	m_serverTime += l_time;
 	m_snapshotTimer += l_time;
 	m_tpsTime += l_time;
 	m_server.Update(l_time);
-	/*std::mutex* l_mutex = m_server.GetMutex();
-	l_mutex->lock();*/
 	m_server.Lock();
 	//std::cout << "In lock world update" << std::endl;
 	m_systems.Update(Clock::millsAsSeconds(l_time));
@@ -36,7 +35,9 @@ void World::Update(const sf::Time& l_time){
 	if (m_snapshotTimer >= SNAPSHOT_INTERVAL){
 		Packet snapshot;
 		m_systems.GetSystem<S_Network>(System::Network)->CreateSnapshot(snapshot);
+		m_server.Lock();
 		m_server.Broadcast(snapshot);
+		m_server.Unlock();
 		m_snapshotTimer = 0;
 	}
 	if (m_tpsTime >= 1000){
@@ -62,6 +63,10 @@ void World::HandlePacket(UINT32& l_ip, const PortNumber& l_port,
 		} else if (type == PacketType::PlayerUpdate){
 			m_systems.GetSystem<S_Network>(System::Network)->UpdatePlayer(l_packet, id);
 		}
+		else if (type == PacketType::BulletSpawn) {
+			std::cout << "Bullet spawn" << std::endl;
+			m_systems.GetSystem<S_Network>(System::Network)->AddBullet(l_packet, id);
+		}
 	} else {
 		if (type != PacketType::Connect){ return; }
 		std::string nickname;
@@ -86,6 +91,7 @@ void World::HandlePacket(UINT32& l_ip, const PortNumber& l_port,
 			return;
 		}
 		m_systems.GetSystem<S_Network>(System::Network)->RegisterClientID(eid, cid);
+	
 		C_Position* pos = m_entities.GetComponent<C_Position>(eid, Component::Position);
 		pos->SetPosition(255.f, 255.f);
 		//m_entities.GetComponent<C_Name>(eid, Component::Name)->SetName(nickname);
@@ -107,10 +113,10 @@ void World::HandlePacket(UINT32& l_ip, const PortNumber& l_port,
 void World::ClientLeave(const ClientID& l_client){
 	/*std::mutex* l_mutex = m_server.GetMutex();
 	ttsv::Lock lock(l_mutex);*/
-	m_server.Lock();
+	//m_server.Lock();
 	S_Network* network = m_systems.GetSystem<S_Network>(System::Network);
 	m_entities.RemoveEntity(network->GetEntityID(l_client));
-	m_server.Unlock();
+	//m_server.Unlock();
 	//LEAVE
 }
 

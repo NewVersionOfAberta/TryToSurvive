@@ -3,6 +3,21 @@
 #include "S_Renderer.h"
 #include "Lock.h"
 
+
+
+S_Network::S_Network(SystemManager* l_systemMgr)
+	: S_Base(System::Network, l_systemMgr), m_client(nullptr), m_player(0)
+{
+	Bitmask req;
+	req.TurnOnBit((unsigned int)Component::Client);
+	m_requiredComponents.push_back(req);
+
+	m_systemManager->GetMessageHandler()->Subscribe(EntityMessage::Move, this);
+	m_systemManager->GetMessageHandler()->Subscribe(EntityMessage::Bullet_add, this);
+	m_playerUpdateTimer = 0;
+}
+
+
 void InterpolateSnapshot(const EntitySnapshot& l_s1, const INT32& T1,
 	const EntitySnapshot& l_s2, const INT32& T2, EntitySnapshot& l_target, const INT32& T_X)
 {
@@ -44,17 +59,6 @@ bool CompareSnapshots(const EntitySnapshot& l_s1, const EntitySnapshot& l_s2,
 	return true;
 }
 
-S_Network::S_Network(SystemManager* l_systemMgr)
-	: S_Base(System::Network, l_systemMgr), m_client(nullptr), m_player(0)
-{
-	Bitmask req;
-	req.TurnOnBit((unsigned int)Component::Client);
-	m_requiredComponents.push_back(req);
-
-	m_systemManager->GetMessageHandler()->Subscribe(EntityMessage::Move, this);
-	m_systemManager->GetMessageHandler()->Subscribe(EntityMessage::Attack, this);
-	m_playerUpdateTimer = 0;
-}
 
 S_Network::~S_Network(){}
 
@@ -62,10 +66,10 @@ void S_Network::Update(float l_dT){
 	if (!m_client){ return; }
 	//m_client->Lock();
 	//std::cout << "S_Network::Update. Take lock at: " << clock.getCurrentTime() << std::endl;
-	m_playerUpdateTimer += Clock::millsAsSeconds(l_dT);
+	m_playerUpdateTimer += l_dT;
 	//std::cout << "Time (sec): " << m_playerUpdateTimer << " cur time (mills) " << l_dT << std::endl;
 	if (Clock::secondsAsMills(m_playerUpdateTimer) >= PLAYER_UPDATE_INTERVAL) {
-		SendPlayerOutgoing();
+		SendPlayerOutgoing(l_dT);
 		m_playerUpdateTimer = 0;
 	}
 	//std::cout << "S_Network::Update. Leave at: " << clock.getCurrentTime() << std::endl;
@@ -114,11 +118,14 @@ void S_Network::ApplyEntitySnapshot(const EntityId& l_entity,
 	//C_Name* name = nullptr;
 	//m_client->Lock();
 	//std::cout << "Network apply. Take lock at: " << clock.getCurrentTime() << std::endl;
-	if (position = entities->GetComponent<C_Position>(l_entity, Component::Position)){
-		//std::cout << "Position old: " << position->GetPosition().first << " : " << position->GetPosition().second << std::endl;
-		position->SetPosition(l_snapshot.m_position);
-		//std::cout << "Position new: " << position->GetPosition().first << " : " << position->GetPosition().second << std::endl;
-		position->SetElevation(l_snapshot.m_elevation);
+	if (movable = entities->GetComponent<C_Movable>(l_entity, Component::Movable)) {
+		if (position = entities->GetComponent<C_Position>(l_entity, Component::Position)) {
+			//std::cout << "Position old: " << position->GetPosition().first << " : " << position->GetPosition().second << std::endl;
+			sf::Vector2f newPosition = sf::Vector2f((position->GetPosition().first + l_snapshot.m_position.first) / 2.f, (position->GetPosition().second + l_snapshot.m_position.second) / 2.f);
+			position->SetPosition(newPosition);
+			//std::cout << "Position new: " << position->GetPosition().first << " : " << position->GetPosition().second << std::endl;
+			position->SetElevation(l_snapshot.m_elevation);
+		}
 	}
 	if (l_applyPhysics){
 		if (movable = entities->GetComponent<C_Movable>(l_entity, Component::Movable)){
@@ -126,11 +133,13 @@ void S_Network::ApplyEntitySnapshot(const EntityId& l_entity,
 			movable->SetAcceleration(l_snapshot.m_acceleration);
 		}
 	}
-	if (movement_s = m_systemManager->GetSystem<S_Movement>(System::Movement)){
-		movement_s->SetDirection(l_entity, (Direction)l_snapshot.m_direction);
-	}
-	if (state_s = m_systemManager->GetSystem<S_State>(System::State)){
-		state_s->ChangeState(l_entity, (EntityState)l_snapshot.m_state, true);
+	if (movable = entities->GetComponent<C_Movable>(l_entity, Component::Movable)) {
+		if (movement_s = m_systemManager->GetSystem<S_Movement>(System::Movement)) {
+			movement_s->SetDirection(l_entity, (Direction)l_snapshot.m_direction);
+		}
+		if (state_s = m_systemManager->GetSystem<S_State>(System::State)){
+			state_s->ChangeState(l_entity, (EntityState)l_snapshot.m_state, true);
+		}
 	}
 	/*if (health = entities->GetComponent<C_Health>(l_entity, Component::Health)){
 		health->SetHealth(l_snapshot.m_health);
@@ -143,11 +152,11 @@ void S_Network::ApplyEntitySnapshot(const EntityId& l_entity,
 	//std::cout << "Network apply. Leave at: " << clock.getCurrentTime() << std::endl;
 }
 
-void S_Network::SendPlayerOutgoing(){
+void S_Network::SendPlayerOutgoing(sf::Time l_dT){
 	INT32 p_x = 0, p_y = 0;
 	INT32 p_a = 0;
-	Packet packet;
-
+	
+	
 	for (auto &itr : m_outgoing){
 		if (itr.first == EntityMessage::Move){
 			INT32 x = 0, y = 0;
@@ -171,16 +180,22 @@ void S_Network::SendPlayerOutgoing(){
 			}
 			if (!x && !y){ continue; }
 			p_x = x; p_y = y;
-		} else if (itr.first == EntityMessage::Attack)
+		} else if (itr.first == EntityMessage::Bullet_add)
 		{ 
 			for (auto& message : itr.second) {
-				
-				packet << INT32(EntityMessage::Attack) << message.m_2f.m_x << message.m_2f.m_y << INT32(Network::PlayerUpdateDelim);
+				Packet bulletSpawnPacket;
+				StampPacket(PacketType::BulletSpawn, bulletSpawnPacket);
+				bulletSpawnPacket << INT32(EntityMessage::Attack) << message.m_sender << 
+					message.m_receiver << message.m_4f.d_x << message.m_4f.d_y
+					<< (float)(message.m_4f.p_x + message.m_4f.d_x * l_dT) << (float)(message.m_4f.p_y + message.m_4f.d_y * l_dT) << INT32(Network::PlayerUpdateDelim);
+				std::cout << "Receive attak sender: " << message.m_sender << " receiver: "
+					<< message.m_receiver << " m_x: " << message.m_4f.p_x + message.m_4f.d_x * l_dT << " p_y: "
+					<< message.m_4f.p_y + message.m_4f.d_y * l_dT << " speed : " << message.m_4f.d_x << " : " << message.m_4f.d_y << std::endl;
+				m_client->Send(bulletSpawnPacket);
 			}
 		}
 	}
-
-	
+	Packet packet;
 	StampPacket(PacketType::PlayerUpdate, packet);
 	packet << INT32(EntityMessage::Move) << p_x << p_y << INT32(Network::PlayerUpdateDelim);
 	
@@ -208,6 +223,7 @@ void S_Network::PerformInterpolation(){
 				if (!entities->HasEntity(snap->first)){
 					if (entities->AddEntity(snap->second.m_type, snap->first) == (int)Network::NullID){
 						std::cout << "Failed adding entity type: " << snap->second.m_type << std::endl;
+						++snap;
 						continue;
 					}
 					ApplyEntitySnapshot(snap->first, snap->second, true);
@@ -218,12 +234,12 @@ void S_Network::PerformInterpolation(){
 				if (snap2 == Snapshot2->second.m_snapshots.end()){
 					// Entity that exists in first snapshot wasn't found in second.
 					// Remove it, as it possibly de-spawned.
-					m_client->Lock();
+					//m_client->Lock();
 					//std::cout << "Network interpol. Take lock at: " << clock.getCurrentTime() << std::endl;
 					entities->RemoveEntity(snap->first);
 					snap = Snapshot1->second.m_snapshots.erase(snap);
 					//LEAVE
-					m_client->Unlock();
+					//m_client->Unlock();
 					//std::cout << "Network interpol. Leave at: " << clock.getCurrentTime() << std::endl;
 					continue;
 				}

@@ -11,7 +11,9 @@ void EntityManager::SetSystemManager(SystemManager* l_sysMgr) {
 
 int EntityManager::AddEntity(const Bitmask& l_mask, int l_id) {
 	unsigned int entity = (l_id != -1 ? l_id : m_idCounter);
-	if (!m_entities.emplace(entity, EntityData()).second) { return -1; }
+	if (!m_entities.emplace(entity, EntityData()).second) {
+		return -1; 
+	}
 	if (l_id == -1) { ++m_idCounter; }
 	for (int i = 0; i < N_COMPONENT_TYPES; ++i) {
 		if (l_mask.GetBit(i)) {

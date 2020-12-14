@@ -12,7 +12,7 @@
 #include <mutex>
 
 #define HEARTBEAT_INTERVAL 1000 // ms.
-#define HEARTBEAT_RETRIES 25
+#define HEARTBEAT_RETRIES 5
 
 struct ClientInfo{
 	ClientInfo(const UINT& l_ip, const PortNumber& l_port,

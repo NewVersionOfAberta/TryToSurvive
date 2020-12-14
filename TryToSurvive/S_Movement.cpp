@@ -23,10 +23,10 @@ void S_Movement::Update(float l_dT) {
 	
 	if (!m_gameMap) { return; }
 	//l_dT = Clock::millsAsSeconds(l_dT);
-	l_dT /= 1000;
+	//l_dT /= 1000;
 	EntityManager* entities = m_systemManager->GetEntityManager();
 	for (auto& entity : m_entities) {
-		std::cout << "Entity id: " << entity << std::endl;
+		//std::cout << "Entity id: " << entity << std::endl;
 		C_Position* position = entities->GetComponent<C_Position>(entity, Component::Position);
 		C_Movable* movable = entities->GetComponent<C_Movable>(entity, Component::Movable);
 		//temp

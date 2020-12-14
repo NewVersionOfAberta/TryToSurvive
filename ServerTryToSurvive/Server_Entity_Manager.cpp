@@ -24,6 +24,7 @@ void ServerEntityManager::DumpEntityInfo(Packet& l_packet){
 			C_Position* p = GetComponent<C_Position>(entity.first, Component::Position);
 			snapshot.m_position = p->GetPosition();
 			snapshot.m_elevation = p->GetElevation();
+			std::cout << "Id: " << entity.first << " Position: " << snapshot.m_position.first << " : " << snapshot.m_position.second << std::endl;
 		}
 		if (mask.GetBit((unsigned int)Component::Movable)){
 			C_Movable* m = GetComponent<C_Movable>(entity.first, Component::Movable);

@@ -45,7 +45,7 @@ public:
 	void AddSnapshot(const EntityId& l_entity, 
 		const INT32& l_timestamp, 
 		EntitySnapshot& l_snapshot);
-	void SendPlayerOutgoing();
+	void SendPlayerOutgoing(sf::Time l_dT);
 	void ClearSnapshots();
 private:
 	void ApplyEntitySnapshot(const EntityId& l_entity,
