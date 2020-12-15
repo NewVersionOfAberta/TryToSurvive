@@ -20,11 +20,11 @@ void S_Timers::Update(float l_dT){
 	for (auto &entity : m_entities){
 		EntityState state = entities->GetComponent<C_State>(entity, Component::State)->GetState();
 		if (state == EntityState::Attacking){
-			C_Attacker* attack = entities->GetComponent<C_Attacker>(entity, Component::Attacker);
-			attack->AddToTimer((l_dT)/1000);//to seconds
-			if (attack->GetTimer() < attack->GetAttackDuration()){ continue; }
-			attack->Reset();
-			attack->SetAttacked(false);
+			//C_Attacker* attack = entities->GetComponent<C_Attacker>(entity, Component::Attacker);
+			//attack->AddToTimer((l_dT)/1000);//to seconds
+			//if (attack->GetTimer() < attack->GetAttackDuration()){ continue; }
+			//attack->Reset();
+			//attack->SetAttacked(false);
 		} else if (state == EntityState::Hurt || state == EntityState::Dying){
 			//C_Health* health = entities->GetComponent<C_Health>(entity, Component::Health);
 			//health->AddToTimer((l_dT) / 1000);//to seconds

@@ -2,6 +2,8 @@
 #include "S_Base.h"
 #include "C_Position.h"
 #include "C_Collidable.h"
+#include "C_Attacker.h"
+
 
 struct TileInfo;
 class Map;

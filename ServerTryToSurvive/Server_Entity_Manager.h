@@ -9,6 +9,7 @@
 #include "C_Attacker.h"
 #include "Packet.h"
 #include "EntitySnapshot.h"
+#include "C_Health.h"
 
 class SystemManager;
 

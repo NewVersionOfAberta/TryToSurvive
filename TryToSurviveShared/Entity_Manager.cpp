@@ -40,7 +40,9 @@ int EntityManager::AddEntity(const std::string& l_entityFile, int l_id) {
 	}
 	std::string line;
 	while (std::getline(file, line)) {
-		if (line[0] == '|') { continue; }
+		if (line[0] == '|') {
+			continue;
+		}
 		std::stringstream keystream(line);
 		std::string type;
 		keystream >> type;

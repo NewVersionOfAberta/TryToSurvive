@@ -26,7 +26,7 @@ public:
 	//void SetPlayerID(int l_playerId) { m_playerId = l_playerId; }
 
 private:
-	void CreateBullet(sf::Vector2f mousePos, sf::Vector2f entityPos, EntityManager* eMgr, int id);
+	void CreateBullet(sf::Vector2f mousePos, sf::Vector2f entityPos, EntityManager* eMgr, int id, int owner);
 	Bullets m_bullets;
 	int m_currId;
 	//int m_playerId;

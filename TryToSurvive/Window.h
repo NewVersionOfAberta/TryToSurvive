@@ -32,6 +32,7 @@ public:
 	void Draw(int destX, int destY, int width, int heigth, int srcX, int srcY, HBITMAP img);
 	void Draw(Sprite sprite);
 	void DrawEllipse(sf::Vector2f position, sf::Vector2u size);
+	void DrawRect(sf::Vector2f position, sf::Vector2u size, COLORREF color);
 	HDC GetCompatibleDC() { return CreateCompatibleDC(m_hdc); }
 	void SetDelta(sf::Vector2f l_delta) { m_viewDelta = l_delta; }
 

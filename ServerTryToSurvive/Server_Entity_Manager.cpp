@@ -7,7 +7,7 @@ ServerEntityManager::ServerEntityManager(SystemManager* l_sysMgr): EntityManager
 	AddComponentType<C_Movable>(Component::Movable);
 	AddComponentType<C_Collidable>(Component::Collidable);
 	AddComponentType<C_Client>(Component::Client);
-	//AddComponentType<C_Health>(Component::Health);
+	AddComponentType<C_Health>(Component::Health);
 	//AddComponentType<C_Name>(Component::Name);
 	AddComponentType<C_Attacker>(Component::Attacker);
 }
@@ -24,7 +24,7 @@ void ServerEntityManager::DumpEntityInfo(Packet& l_packet){
 			C_Position* p = GetComponent<C_Position>(entity.first, Component::Position);
 			snapshot.m_position = p->GetPosition();
 			snapshot.m_elevation = p->GetElevation();
-			std::cout << "Id: " << entity.first << " Position: " << snapshot.m_position.first << " : " << snapshot.m_position.second << std::endl;
+			//std::cout << "Id: " << entity.first << " Position: " << snapshot.m_position.first << " : " << snapshot.m_position.second << std::endl;
 		}
 		if (mask.GetBit((unsigned int)Component::Movable)){
 			C_Movable* m = GetComponent<C_Movable>(entity.first, Component::Movable);
@@ -37,8 +37,8 @@ void ServerEntityManager::DumpEntityInfo(Packet& l_packet){
 			snapshot.m_state = UINT8(s->GetState());
 		}
 		if (mask.GetBit((unsigned int)Component::Health)){
-			//C_Health* h = GetComponent<C_Health>(entity.first, Component::Health);
-			//snapshot.m_health = h->GetHealth();
+			C_Health* h = GetComponent<C_Health>(entity.first, Component::Health);
+			snapshot.m_health = h->GetHealth();
 		}
 		if (mask.GetBit((unsigned int)Component::Name)){
 			//C_Name* n = GetComponent<C_Name>(entity.first, Component::Name);

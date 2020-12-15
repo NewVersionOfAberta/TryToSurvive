@@ -4,6 +4,7 @@
 #include "MessageHandler.h"
 #include <unordered_map>
 #include "S_Base.h"
+#include "C_Attacker.h"
 
 using SystemContainer = std::unordered_map<System, S_Base*>;
 using EntityEventContainer = std::unordered_map<EntityId, EventQueue>;

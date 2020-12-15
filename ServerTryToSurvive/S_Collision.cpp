@@ -45,29 +45,43 @@ void S_Collision::EntityCollisions(){
 		
 			C_Attacker* attacker1 = entities->GetComponent<C_Attacker>(*itr, Component::Attacker);
 			C_Attacker* attacker2 = entities->GetComponent<C_Attacker>(*itr2, Component::Attacker);
+			//std::string s = attacker1 ? " yes" : " no ";
+			//std::cout << *itr << s << std::endl;
 			if (attacker1 && attacker2){ 
-				m_systemManager->AddEvent(*itr, (EventID)EntityEvent::Colliding_X);
-				m_systemManager->AddEvent(*itr2, (EventID)EntityEvent::Colliding_X);
+				if (attacker1->GetAreaOfAttack().intersects(attacker2->GetAreaOfAttack(), Intersection)) {
+					m_systemManager->AddEvent(*itr, (EventID)EntityEvent::Colliding_X);
+					m_systemManager->AddEvent(*itr2, (EventID)EntityEvent::Colliding_X);
+				}
 				continue;
 			}
 			Message msg((MessageType)EntityMessage::Being_Attacked);
 			if (attacker1 && !attacker2){
 				C_Collidable* collidable2 = entities->GetComponent<C_Collidable>(*itr2, Component::Collidable);
+				collidable2->SetOrigin(Origin::Top_Left);
 				if (attacker1->GetAreaOfAttack().intersects(collidable2->GetCollidable(), Intersection)){
 					// Attacker-on-entity collision!
+					if (attacker1->GetOwner() == *itr2) { continue; }
+					std::cout << "Bullet " << *itr << " and person: " << *itr2 << std::endl;
 					msg.m_receiver = *itr2;
 					msg.m_sender = *itr;
 					m_systemManager->GetMessageHandler()->Dispatch(msg);
+					m_systemManager->AddEvent(*itr, (EventID)EntityEvent::Colliding_X);
 				}
+				collidable2->SetOrigin(Origin::Mid_Bottom);
 			}
 			if (attacker2 && !attacker1){
 				C_Collidable* collidable1 = entities->GetComponent<C_Collidable>(*itr, Component::Collidable);
+				collidable1->SetOrigin(Origin::Top_Left);
 				if (attacker2->GetAreaOfAttack().intersects(collidable1->GetCollidable(), Intersection)){
+					if (attacker2->GetOwner() == *itr) { continue; }
+					std::cout << "Bullet " << *itr2 << " and person: " << *itr << std::endl;
 					// Attacker-on-entity collision!
 					msg.m_receiver = *itr;
 					msg.m_sender = *itr2;
 					m_systemManager->GetMessageHandler()->Dispatch(msg);
+					m_systemManager->AddEvent(*itr2, (EventID)EntityEvent::Colliding_X);
 				}
+				collidable1->SetOrigin(Origin::Mid_Bottom);
 			}
 		}
 	}

@@ -111,6 +111,9 @@
     <ClInclude Include="S_Bullets.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="S_CharacterUI.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -174,6 +177,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="S_Bullets.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="S_CharacterUI.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

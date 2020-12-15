@@ -35,18 +35,50 @@ void S_Collision::Update(float l_dT) {
 }
 
 void S_Collision::EntityCollisions() {
-	//EntityManager* entities = m_systemManager->GetEntityManager();
-	//for (auto itr = m_entities.begin(); itr != m_entities.end(); ++itr)
-	//{
-	//	for (auto itr2 = std::n.first(itr); itr2 != m_entities.end(); ++itr2) {
-	//		C_Collidable* collidable1 = entities->GetComponent<C_Collidable>(*itr, Component::Collidable);
-	//		C_Collidable* collidable2 = entities->GetComponent<C_Collidable>(*itr2, Component::Collidable);
-	//		if (collidable1->GetCollidable().intersects(collidable2->GetCollidable()))
-	//		{
-	//			// Entity-on-entity collision!
-	//		}
-	//	}
-	//}
+	EntityManager* entities = m_systemManager->GetEntityManager();
+	sf::FloatRect Intersection;
+	for (auto itr = m_entities.begin(); itr != m_entities.end(); ++itr)
+	{
+		for (auto itr2 = std::next(itr); itr2 != m_entities.end(); ++itr2) {
+
+
+			C_Attacker* attacker1 = entities->GetComponent<C_Attacker>(*itr, Component::Attacker);
+			C_Attacker* attacker2 = entities->GetComponent<C_Attacker>(*itr2, Component::Attacker);
+			/*std::string s = attacker1 ? " yes" : " no ";
+			std::cout << *itr << s << std::endl;
+			s = attacker2 ? " yes" : " no ";
+			std::cout << *itr2 << s << std::endl;*/
+			if (attacker1 && attacker2) {
+				if (attacker1->GetAreaOfAttack().intersects(attacker2->GetAreaOfAttack(), Intersection)) {
+					m_systemManager->AddEvent(*itr, (EventID)EntityEvent::Colliding_X);
+					m_systemManager->AddEvent(*itr2, (EventID)EntityEvent::Colliding_X);
+				}
+				continue;
+			}
+			if (attacker1 && !attacker2) {
+				if (attacker1->GetOwner() == *itr2) { continue; }
+				C_Collidable* collidable2 = entities->GetComponent<C_Collidable>(*itr2, Component::Collidable);
+				collidable2->SetOrigin(Origin::Top_Left);
+				if (attacker1->GetAreaOfAttack().intersects(collidable2->GetCollidable(), Intersection)) {
+					// Attacker-on-entity collision!
+					//std::cout << "Bullet " << *itr << " and person: " << *itr2 << std::endl;
+					m_systemManager->AddEvent(*itr, (EventID)EntityEvent::Colliding_X);
+				}
+				collidable2->SetOrigin(Origin::Mid_Bottom);
+			}
+			if (attacker2 && !attacker1) {
+				if (attacker2->GetOwner() == *itr) { continue; }
+				C_Collidable* collidable1 = entities->GetComponent<C_Collidable>(*itr, Component::Collidable);
+				collidable1->SetOrigin(Origin::Top_Left);
+				if (attacker2->GetAreaOfAttack().intersects(collidable1->GetCollidable(), Intersection)) {
+				//	std::cout << "Bullet " << *itr2 << " and person: " << *itr << std::endl;
+					// Attacker-on-entity collision!
+					m_systemManager->AddEvent(*itr2, (EventID)EntityEvent::Colliding_X);
+				}
+				collidable1->SetOrigin(Origin::Mid_Bottom);
+			}
+		}
+	}
 }
 
 void S_Collision::CheckOutOfBounds(C_Position* l_pos, C_Collidable* l_col) {
@@ -112,7 +144,7 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 		float xDiff = (EntityAABB.left + (EntityAABB.width / 2)) - (col.m_tileBounds.left + (col.m_tileBounds.width / 2));
 		float yDiff = (EntityAABB.top + (EntityAABB.height / 2)) - (col.m_tileBounds.top + (col.m_tileBounds.height / 2));
 		float resolve = 0;
-		std::cout << "Collison Detected";
+		//std::cout << "Collison Detected";
 		if (std::abs(xDiff) > std::abs(yDiff)) {
 			if (xDiff > 0) {
 				resolve = (col.m_tileBounds.left + TileSize) - EntityAABB.left;

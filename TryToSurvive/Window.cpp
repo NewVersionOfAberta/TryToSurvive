@@ -138,6 +138,20 @@ void Window::DrawEllipse(sf::Vector2f position, sf::Vector2u size)
 		posOnScreen.second + size.second);
 }
 
+void Window::DrawRect(sf::Vector2f position, sf::Vector2u size, COLORREF color) {
+	sf::Vector2f posOnScreen = ConvertToScreen(position);
+	HBRUSH oldBrush, newBrush = CreateSolidBrush(color);
+	HPEN oldPen, newPen = CreatePen(PS_SOLID, 1, color);
+	oldBrush = (HBRUSH)SelectObject(m_tempDC, newBrush);
+	oldPen = (HPEN)SelectObject(m_tempDC, newPen);
+	Rectangle(m_tempDC, posOnScreen.first, posOnScreen.second, posOnScreen.first + size.first, posOnScreen.second + size.second);
+	SelectObject(m_tempDC, oldBrush);
+	SelectObject(m_tempDC, oldPen);
+	DeleteObject(newBrush);
+	DeleteObject(newPen);
+}
+
+
 LRESULT Window::ProcessEvents(HWND hWnd, UINT message,
     WPARAM wParam, LPARAM lParam)
 {

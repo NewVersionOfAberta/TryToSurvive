@@ -12,7 +12,7 @@ ClientSystemManager::ClientSystemManager(TextureManager* l_textureMgr/*, FontMan
 	AddSystem<S_SheetAnimation>(System::SheetAnimation);
 	AddSystem<S_Network>(System::Network);
 	//AddSystem<S_Sound>(System::Sound);
-	//AddSystem<S_CharacterUI>(System::Character_UI);
+	AddSystem<S_CharacterUI>(System::Character_UI);
 	AddSystem<S_Renderer>(System::Renderer);
 }
 ClientSystemManager::~ClientSystemManager() {}
@@ -29,7 +29,7 @@ void ClientSystemManager::Draw(Window* l_wind, unsigned int l_elevation)
 	}
 	itr = m_systems.find(System::Character_UI);
 	if (itr != m_systems.end()) {
-		//S_CharacterUI* ui = (S_CharacterUI*)itr->second;
-		//ui->Render(l_wind);
+		S_CharacterUI* ui = (S_CharacterUI*)itr->second;
+		ui->Render(l_wind);
 	}
 }

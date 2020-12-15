@@ -32,6 +32,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)PacketTypes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Clock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Lock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Health.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Attacker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)S_Base.cpp" />

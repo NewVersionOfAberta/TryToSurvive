@@ -10,10 +10,11 @@ ClientEntityManager::ClientEntityManager(SystemManager* l_sysMgr,
 	AddComponentType<C_Collidable>(Component::Collidable);
 	AddComponentType<C_SpriteSheet>(Component::SpriteSheet);
 	AddComponentType<C_Shape>(Component::Shape);
+	AddComponentType<C_Attacker>(Component::Attacker);
 	//AddComponentType<C_SoundEmitter>(Component::SoundEmitter);
 	//AddComponentType<C_SoundListener>(Component::SoundListener);
 	AddComponentType<C_Client>(Component::Client);
-	//AddComponentType<C_Health>(Component::Health);
+	AddComponentType<C_Health>(Component::Health);
 	//AddComponentType<C_Name>(Component::Name);
 	//AddComponentType<C_UI_Element>(Component::UI_Element);*/
 }

@@ -44,12 +44,17 @@ void S_Bullets::Update(float l_dT)
 			if (delBullet != m_bullets.end()) {
 				m_bullets.erase(delBullet);
 			}
-			continue;
+			
 		}
-		sf::Vector2f newPosition(
-			position->GetPosition().first + l_dT * bullet.m_speedX, position->GetPosition().second + l_dT * bullet.m_speedY);
-		position->SetPosition(newPosition);
-		std::cout << "Update bullet pos : " << newPosition.first << " : " << newPosition.second << std::endl;
+		else {
+			sf::Vector2f newPosition(
+				position->GetPosition().first + l_dT * bullet.m_speedX, position->GetPosition().second + l_dT * bullet.m_speedY);
+			position->SetPosition(newPosition);
+			C_Attacker* attack = eMgr->GetComponent<C_Attacker>(bullet.m_id, Component::Attacker);
+			if (!attack) { return; }
+			attack->SetAreaPosition(newPosition);
+			//std::cout << "Update bullet pos : " << newPosition.first << " : " << newPosition.second << std::endl;
+		}
 	}
 
 }
@@ -61,12 +66,12 @@ void S_Bullets::HandleEvent(const EntityId& l_entity, const EntityEvent& l_event
 	case EntityEvent::Colliding_X:
 	case EntityEvent::Colliding_Y:
 	{
-		std::cout << "Remove bullet: " << l_entity << std::endl;
 		//eMgr->RemoveEntity(l_entity);
-
+		//std::cout << "Collizion event" << std::endl;
 		auto bullet = std::find_if(m_bullets.begin(), m_bullets.end(),
 			[l_entity](Bullet b) { return b.m_id == l_entity; });
 		if (bullet != m_bullets.end()) {
+			std::cout << "Remove bullet: " << l_entity << std::endl;
 			m_bullets.erase(bullet);
 			eMgr->RemoveEntity(l_entity);
 		}
@@ -87,12 +92,12 @@ void S_Bullets::Notify(const Message& l_message)
 		EntityManager* eMgr = m_systemManager->GetEntityManager();
 		sf::Vector2f pos(l_message.m_4f.p_x, l_message.m_4f.p_y);
 		sf::Vector2f speed(l_message.m_4f.d_x, l_message.m_4f.d_y);
-		CreateBullet(speed, pos, eMgr, l_message.m_sender);
+		CreateBullet(speed, pos, eMgr, l_message.m_sender, l_message.m_receiver);
 	}
 	}
 }
 
-void S_Bullets::CreateBullet(sf::Vector2f speed, sf::Vector2f pos, EntityManager* eMgr, int id)
+void S_Bullets::CreateBullet(sf::Vector2f speed, sf::Vector2f pos, EntityManager* eMgr, int id, int owner)
 {
 	std::cout << "Create bullet: " << id << "on " << pos.first << ", second " << pos.second << " speed :" << speed.first << " : "
 		<< speed.second << std::endl;
@@ -125,6 +130,7 @@ void S_Bullets::CreateBullet(sf::Vector2f speed, sf::Vector2f pos, EntityManager
 	C_Attacker* attacker = eMgr->GetComponent<C_Attacker>(id, Component::Attacker);
 	attacker->SetAreaPosition(sf::Vector2f(pos.first, pos.second));
 	attacker->SetSize(sf::Vector2f(BULLET_WIDTH, BULLET_HEIGHT));
+	attacker->SetOwner(owner);
 	/*C_Shape* shapeBullet = eMgr->GetComponent<C_Shape>(m_currId, Component::Shape);
 	if (!shapeBullet) { return; }
 	shapeBullet->SetSize(sf::Vector2u(BULLET_WIDTH, BULLET_HEIGHT));*/

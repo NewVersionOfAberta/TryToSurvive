@@ -270,9 +270,9 @@ void State_Game::HandlePacket(const PacketID& l_id, Packet& l_packet, Client* l_
 		Message msg((MessageType)EntityMessage::Bullet_add);
 		if (!(l_packet >> id >> bulletId >> speed.first >> speed.second >> pos.first >> pos.second)) { return; }
 		if (m_player == id) { return; }
-		std::cout << " receiver: " << id << " sender: " << bulletId << " pos.first: " << pos.first << " pos.second: " << pos.second << std::endl;
+		//std::cout << " receiver: " << id << " sender: " << bulletId << " pos.first: " << pos.first << " pos.second: " << pos.second << std::endl;
 		S_Bullets* s = m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Bullets>(System::Bullets);
-		s->AddBullet(pos, speed, bulletId);
+		s->AddBullet(pos, speed, bulletId, id);
 		/*msg.m_receiver = id;
 		msg.m_sender = bulletId;
 		msg.m_2f.m_x = m_x;

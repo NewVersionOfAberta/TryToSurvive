@@ -154,7 +154,6 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C_Attacker.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="NetSettings.h" />
     <ClInclude Include="Server.h" />

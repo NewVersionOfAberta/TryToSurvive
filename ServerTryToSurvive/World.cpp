@@ -82,7 +82,7 @@ void World::HandlePacket(UINT32& l_ip, const PortNumber& l_port,
 		/*std::mutex* l_mutex = m_server.GetMutex();
 		ttsv::Lock lock(l_mutex);*/
 		m_server.Lock();
-		std::cout << "In lock world handle" << std::endl;
+		//std::cout << "In lock world handle" << std::endl;
 		INT32 eid = m_entities.AddEntity("Player");
 		std::cout << "New client! Add entity -" << eid << std::endl;
 		if (eid == -1){

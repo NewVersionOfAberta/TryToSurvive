@@ -15,8 +15,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Clock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Attacker.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)C_Client.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)C_Collidable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)C_Health.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)C_Movable.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)C_State.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)C_TimedComponentBase.h" />

@@ -5,6 +5,7 @@
 #include "S_Base.h"
 #include "C_Position.h"
 #include "C_Drawable.h"
+#include "C_Health.h"
 
 class S_Renderer : public S_Base {
 public:

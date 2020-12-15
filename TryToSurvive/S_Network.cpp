@@ -114,7 +114,7 @@ void S_Network::ApplyEntitySnapshot(const EntityId& l_entity,
 	C_Movable* movable = nullptr;
 	S_Movement* movement_s = nullptr;
 	S_State* state_s = nullptr;
-	//C_Health* health = nullptr;
+	C_Health* health = nullptr;
 	//C_Name* name = nullptr;
 	//m_client->Lock();
 	//std::cout << "Network apply. Take lock at: " << clock.getCurrentTime() << std::endl;
@@ -141,12 +141,13 @@ void S_Network::ApplyEntitySnapshot(const EntityId& l_entity,
 			state_s->ChangeState(l_entity, (EntityState)l_snapshot.m_state, true);
 		}
 	}
-	/*if (health = entities->GetComponent<C_Health>(l_entity, Component::Health)){
+	if (health = entities->GetComponent<C_Health>(l_entity, Component::Health)){
 		health->SetHealth(l_snapshot.m_health);
+		//std::cout << "New health: " << health->GetHealth() << std::endl;
 	}
-	if (name = entities->GetComponent<C_Name>(l_entity, Component::Name)){
-		name->SetName(l_snapshot.m_name);
-	}*/
+	//if (name = entities->GetComponent<C_Name>(l_entity, Component::Name)){
+	//	name->SetName(l_snapshot.m_name);
+	//}*/
 	//m_client->Unlock();
 	//LEAVE
 	//std::cout << "Network apply. Leave at: " << clock.getCurrentTime() << std::endl;

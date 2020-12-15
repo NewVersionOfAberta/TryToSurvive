@@ -9,6 +9,7 @@
 #include "C_Collidable.h"
 #include "C_Shape.h"
 #include "C_Client.h"
+#include "C_Health.h"
 
 
 

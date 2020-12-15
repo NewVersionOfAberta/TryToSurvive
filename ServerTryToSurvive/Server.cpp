@@ -182,7 +182,7 @@ void Server::Update(const sf::Time& l_time){
 ClientID Server::AddClient(const UINT32& l_ip, const PortNumber& l_port){
 	//ttsv::Lock lock(&m_mutex);
 	m_mutex.lock();
-	std::cout << "Server lock on add client" << std::endl;
+	//std::cout << "Server lock on add client" << std::endl;
 	for (auto &itr : m_clients){
 		if (itr.second.m_clientIP == l_ip && itr.second.m_clientPORT == l_port){
 			m_mutex.unlock();
